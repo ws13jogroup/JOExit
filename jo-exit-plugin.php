@@ -3,7 +3,7 @@
  * Plugin Name: JOb Exit Plugin
  * Plugin URI: https://example.com/jo-exit-plugin
  * Description: A Tinder-style app for employees with swipe functionality
- * Version: 1.0.0
+ * Version: 1.0.2
  * Author: Augment
  * Author URI: https://example.com
  * Text Domain: job-exit-plugin
@@ -16,7 +16,7 @@ if (!defined('WPINC')) {
 }
 
 // Define plugin constants
-define('JO_EXIT_PLUGIN_VERSION', '1.0.0');
+define('JO_EXIT_PLUGIN_VERSION', '1.0.2');
 define('JO_EXIT_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('JO_EXIT_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -27,9 +27,9 @@ require_once JO_EXIT_PLUGIN_PATH . 'plugin-update-checker/plugin-update-checker.
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 $myUpdateChecker = PucFactory::buildUpdateChecker(
-	'https://github.com/ws13jogroup/JOExit/',
-	__FILE__,
-	'JOExit'
+    'https://github.com/ws13jogroup/JOExit/',
+    __FILE__,
+    'job-exit-plugin'
 );
 
 // Set the branch that contains the stable release.
@@ -41,7 +41,8 @@ $myUpdateChecker->setBranch('main');
 /**
  * The code that runs during plugin activation.
  */
-function activate_jo_exit_plugin() {
+function activate_jo_exit_plugin()
+{
     require_once JO_EXIT_PLUGIN_PATH . 'includes/class-jo-exit-activator.php';
     Jo_Exit_Activator::activate();
 }
@@ -49,7 +50,8 @@ function activate_jo_exit_plugin() {
 /**
  * The code that runs during plugin deactivation.
  */
-function deactivate_jo_exit_plugin() {
+function deactivate_jo_exit_plugin()
+{
     require_once JO_EXIT_PLUGIN_PATH . 'includes/class-jo-exit-deactivator.php';
     Jo_Exit_Deactivator::deactivate();
 }
@@ -66,7 +68,8 @@ require JO_EXIT_PLUGIN_PATH . 'includes/class-jo-exit.php';
 /**
  * Begins execution of the plugin.
  */
-function run_jo_exit_plugin() {
+function run_jo_exit_plugin()
+{
     $plugin = new Jo_Exit();
     $plugin->run();
 }
