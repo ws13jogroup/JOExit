@@ -1,0 +1,459 @@
+/**
+ * Admin styles for JO Exit Plugin
+ */
+
+.jo-exit-admin-container {
+    margin: 20px;
+}
+
+.jo-exit-admin-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.jo-exit-admin-header h1 {
+    margin-right: 20px;
+}
+
+.jo-exit-admin-tabs {
+    margin-bottom: 20px;
+}
+
+.jo-exit-admin-tab {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-right: 5px;
+    background-color: #f1f1f1;
+    border-radius: 5px 5px 0 0;
+    text-decoration: none;
+    color: #444;
+    border: 1px solid #ccc;
+    border-bottom: none;
+}
+
+.jo-exit-admin-tab.active {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+    margin-bottom: -1px;
+    position: relative;
+}
+
+.jo-exit-admin-content {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 0 5px 5px 5px;
+}
+
+.jo-exit-admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.jo-exit-admin-table th,
+.jo-exit-admin-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.jo-exit-admin-table th {
+    background-color: #f5f5f5;
+}
+
+.jo-exit-admin-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.jo-exit-admin-form {
+    max-width: 800px;
+}
+
+.jo-exit-admin-form .form-row {
+    margin-bottom: 15px;
+}
+
+.jo-exit-admin-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.jo-exit-admin-form input[type="text"],
+.jo-exit-admin-form input[type="date"],
+.jo-exit-admin-form select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.jo-exit-admin-form .button-row {
+    margin-top: 20px;
+}
+
+.jo-exit-admin-form .preview-image {
+    max-width: 150px;
+    max-height: 150px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: none;
+}
+
+.jo-exit-photo-buttons {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.jo-exit-or {
+    margin: 0 10px;
+    color: #666;
+}
+
+/* Gender selector removed */
+
+#jo-exit-generate-avatar {
+    background-color: #0073aa;
+    color: white;
+    border-color: #0073aa;
+}
+
+#jo-exit-generate-avatar:hover {
+    background-color: #005a87;
+    border-color: #005a87;
+}
+
+.jo-exit-employee-photo {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.jo-exit-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.jo-exit-actions button {
+    cursor: pointer;
+}
+
+.jo-exit-exit-icon {
+    color: #e74c3c;
+}
+
+.jo-exit-edit-icon {
+    color: #3498db;
+}
+
+.jo-exit-delete-icon {
+    color: #e74c3c;
+}
+
+.jo-exit-reset-icon {
+    color: #f39c12;
+}
+
+/* Modal styles */
+.jo-exit-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.jo-exit-modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jo-exit-modal-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.jo-exit-modal-close:hover,
+.jo-exit-modal-close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+.jo-exit-modal-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.jo-exit-modal-footer {
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
+    text-align: right;
+}
+
+/* Exited employees styles */
+.jo-exit-exited-photo {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    filter: grayscale(100%);
+}
+
+/* Settings styles */
+.jo-exit-settings-form {
+    max-width: 600px;
+}
+
+.jo-exit-settings-form .form-row {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.jo-exit-settings-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.jo-exit-settings-form input[type="color"] {
+    width: 100px;
+    height: 40px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.jo-exit-logo-upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.jo-exit-logo-preview {
+    background-color: var(--theme-color, #ff4757);
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    max-width: 300px;
+}
+
+.jo-exit-logo-preview img {
+    max-width: 100%;
+    height: 42px;
+    display: block;
+}
+
+.jo-exit-logo-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.jo-exit-settings-form .description {
+    margin-top: 5px;
+    color: #666;
+    font-style: italic;
+}
+
+.jo-exit-settings-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.jo-exit-settings-section h2 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Success and error messages */
+.jo-exit-message {
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.jo-exit-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.jo-exit-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Cooldown management styles */
+.jo-exit-cooldown-actions {
+    margin-bottom: 20px;
+}
+
+.jo-exit-cooldown-table-container {
+    margin-top: 20px;
+}
+
+.jo-exit-cooldown-active {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.jo-exit-cooldown-inactive {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+#jo-exit-cooldown-table .spinner {
+    float: none;
+    margin: 0 0 0 10px;
+    vertical-align: middle;
+}
+
+#jo-exit-reset-all-cooldowns {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+    color: white;
+}
+
+#jo-exit-reset-all-cooldowns:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+}
+
+/* Leaderboard management styles */
+.jo-exit-leaderboard-actions {
+    margin-bottom: 20px;
+}
+
+.jo-exit-leaderboard-table-container {
+    margin-top: 20px;
+}
+
+#jo-exit-leaderboard-table .spinner {
+    float: none;
+    margin: 0 0 0 10px;
+    vertical-align: middle;
+}
+
+.button-warning {
+    background: #f0ad4e;
+    border-color: #eea236;
+    color: #fff;
+}
+
+.button-warning:hover {
+    background: #ec971f;
+    border-color: #d58512;
+    color: #fff;
+}
+
+.button-danger {
+    background: #d9534f;
+    border-color: #d43f3a;
+    color: #fff;
+}
+
+.button-danger:hover {
+    background: #c9302c;
+    border-color: #ac2925;
+    color: #fff;
+}
+
+.jo-exit-exp-points-edit {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* User votes page styles */
+.jo-exit-filters {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.jo-exit-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.jo-exit-filter-item {
+    flex: 1;
+    min-width: 200px;
+}
+
+.jo-exit-filter-item label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.jo-exit-filter-item select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.jo-exit-vote-exit {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.jo-exit-vote-nope {
+    color: #3498db;
+    font-weight: bold;
+}
+
+.jo-exit-form-row {
+    margin-bottom: 15px;
+}
+
+.jo-exit-form-row label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.jo-exit-form-row input,
+.jo-exit-form-row select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.jo-exit-form-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}

@@ -1,0 +1,723 @@
+# Copyright (C) 2023 Augment
+# This file is distributed under the same license as the JOb Exit Plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: JOb Exit Plugin 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/job-exit-plugin\n"
+"POT-Creation-Date: 2023-10-15T12:00:00+00:00\n"
+"PO-Revision-Date: 2025-04-19 10:48+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.6\n"
+"X-Domain: job-exit-plugin\n"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Points"
+msgstr "Punti"
+
+msgid "Exit"
+msgstr "Exit"
+
+msgid "Leaderboard"
+msgstr "Classifica"
+
+msgid "Account"
+msgstr "Account"
+
+msgid "Edit Profile"
+msgstr "Modifica Profilo"
+
+msgid "Logout"
+msgstr "Esci"
+
+msgid "Voted Employees"
+msgstr "Dipendenti Votati"
+
+msgid "Loading..."
+msgstr "Caricamento..."
+
+msgid "Login"
+msgstr "Accedi"
+
+msgid "Username or Email"
+msgstr "Username o Email"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Don't have an account?"
+msgstr "Non hai un account?"
+
+msgid "Register"
+msgstr "Registrati"
+
+msgid "Registration"
+msgstr "Registrazione"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Password must be at least 8 characters long."
+msgstr "La password deve essere di almeno 8 caratteri."
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Avatar Preview"
+msgstr "Anteprima Avatar"
+
+msgid "Upload Image"
+msgstr "Carica immagine"
+
+msgid "or"
+msgstr "oppure"
+
+msgid "Generate Random"
+msgstr "Genera casuale"
+
+msgid "If you have problems uploading an image, you can generate a random avatar."
+msgstr "Se hai problemi con il caricamento dell'immagine, puoi generare un avatar casuale."
+
+msgid "Already have an account?"
+msgstr "Hai già un account?"
+
+msgid "You must be logged in to edit your profile."
+msgstr "Devi essere loggato per modificare il profilo."
+
+msgid "Username cannot be changed."
+msgstr "L'username non può essere modificato."
+
+msgid "New Password"
+msgstr "Nuova Password"
+
+msgid "Leave empty to keep your current password."
+msgstr "Lascia vuoto per mantenere la password attuale."
+
+msgid "Update Profile"
+msgstr "Aggiorna Profilo"
+
+msgid "Back to Profile"
+msgstr "Torna al profilo"
+
+msgid "Delete Account"
+msgstr "Elimina Account"
+
+msgid "Warning: this action is irreversible. All your data will be permanently deleted."
+msgstr "Attenzione: questa azione è irreversibile. Tutti i tuoi dati verranno eliminati definitivamente."
+
+msgid "Exit Points"
+msgstr "Exit Points"
+
+msgid "Exited Employees"
+msgstr "Dipendenti Usciti"
+
+msgid "No employees have exited yet."
+msgstr "Nessun dipendente è ancora uscito."
+
+msgid "Exited on:"
+msgstr "Uscito il:"
+
+msgid "Seniority:"
+msgstr "Anzianità:"
+
+msgid "Final Score:"
+msgstr "Punteggio finale:"
+
+msgid "points"
+msgstr "punti"
+
+msgid "Exit Points:"
+msgstr "Exit Points:"
+
+msgid "Top Player:"
+msgstr "Top Player:"
+
+msgid "Player Points"
+msgstr "Player Points"
+
+msgid "No winner"
+msgstr "Nessun vincitore"
+
+msgid "Seniority"
+msgstr "Anzianità"
+
+msgid "year"
+msgstr "anno"
+
+msgid "years"
+msgstr "anni"
+
+msgid "Each card shows the colleague's photo, name, company code, and years of service."
+msgstr "Ogni carta mostra la foto del collega, il nome, il codice aziendale e gli anni di anzianità."
+
+msgid "These are your personal points that you earn when an employee you voted for ends up in the Exit screen. The calculation is: employee's years of service + total exit points received * exit points assigned by the user = experience points earned!"
+msgstr "Sono i tuoi punti personali che guadagni quando un dipendente che hai votato finisce nella schermata Exit. Il calcolo è: anni di anzianità del dipendente + exit point totali ricevuti * exit point assegnati dall'utente = punti esperienza guadagnati!"
+
+msgid "N/A"
+msgstr "N/D"
+
+msgid "Loading employees..."
+msgstr "Caricamento dipendenti..."
+
+msgid "No employees available for voting. Check back later!"
+msgstr "Nessun dipendente disponibile per la votazione. Riprova più tardi!"
+
+msgid "No valid employees available for voting. Check back later!"
+msgstr "Nessun dipendente valido disponibile per la votazione. Riprova più tardi!"
+
+msgid "An error occurred while loading employees."
+msgstr "Si è verificato un errore durante il caricamento dei dipendenti."
+
+msgid "Security check failed"
+msgstr "Controllo di sicurezza fallito"
+
+msgid "An error occurred while loading exited employees."
+msgstr "Si è verificato un errore durante il caricamento dei dipendenti usciti."
+
+msgid "Invalid input"
+msgstr "Input non valido"
+
+msgid "Failed to record vote"
+msgstr "Impossibile registrare il voto"
+
+msgid "Error loading account screen. Please try again later."
+msgstr "Errore nel caricamento della schermata account. Riprova più tardi."
+
+msgid "Nonce not provided"
+msgstr "Nonce non fornito"
+
+msgid "Leaderboard feature coming soon!"
+msgstr "Funzionalità Classifica in arrivo!"
+
+msgid "Access Required"
+msgstr "Accesso richiesto"
+
+msgid "To vote for employees, you need to log in or register."
+msgstr "Per votare i dipendenti devi effettuare l'accesso o registrarti."
+
+msgid "Login / Register"
+msgstr "Accedi / Registrati"
+
+msgid "Wait before voting again"
+msgstr "Attendi prima di votare nuovamente"
+
+msgid "You have voted for all employees. You can vote again in:"
+msgstr "Hai votato tutti i dipendenti. Potrai votare nuovamente tra:"
+
+msgid "Voted NOPE"
+msgstr "Votato NOPE"
+
+msgid "You have not voted for any employees yet."
+msgstr "Non hai ancora votato nessun dipendente."
+
+msgid "Your score:"
+msgstr "Il tuo punteggio:"
+
+msgid "Loading scores..."
+msgstr "Caricamento punteggi..."
+
+msgid "Loading exited employees..."
+msgstr "Caricamento dipendenti usciti..."
+
+msgid "Loading global leaderboard..."
+msgstr "Caricamento classifica globale..."
+
+msgid "Checking status..."
+msgstr "Verifica stato..."
+
+msgid "Verifying URL..."
+msgstr "Verifica URL in corso..."
+
+msgid "No employees in the score leaderboard."
+msgstr "Nessun dipendente nella classifica dei punteggi."
+
+msgid "An error occurred while loading scores."
+msgstr "Si è verificato un errore durante il caricamento dei punteggi."
+
+msgid "Error in server response format."
+msgstr "Errore nel formato della risposta dal server."
+
+msgid "Error loading data."
+msgstr "Errore nel caricamento dei dati."
+
+msgid "Error loading registration screen. Please try again later."
+msgstr "Errore nel caricamento della schermata di registrazione. Riprova più tardi."
+
+msgid "Error loading profile screen. Please try again later."
+msgstr "Errore nel caricamento della schermata di modifica profilo. Riprova più tardi."
+
+msgid "An error occurred while updating your profile. Please try again later."
+msgstr "Si è verificato un errore durante l'aggiornamento del profilo. Riprova più tardi."
+
+msgid "An error occurred while deleting your account. Please try again later."
+msgstr "Si è verificato un errore durante l'eliminazione dell'account. Riprova più tardi."
+
+msgid "Deleting account..."
+msgstr "Eliminazione account in corso..."
+
+msgid "Are you sure you want to delete your account? This action is irreversible and all your data will be permanently deleted."
+msgstr "Sei sicuro di voler eliminare il tuo account? Questa azione è irreversibile e tutti i tuoi dati verranno eliminati definitivamente."
+
+msgid "All fields are required."
+msgstr "Tutti i campi sono obbligatori."
+
+msgid "Email is required."
+msgstr "L'email è obbligatoria."
+
+msgid "Please enter a valid URL."
+msgstr "Inserisci un URL valido."
+
+msgid "Please enter a valid URL starting with http:// or https://."
+msgstr "Inserisci un URL valido che inizi con http:// o https://."
+
+msgid "The URL does not seem to be a valid image. Please try another URL."
+msgstr "L'URL non sembra essere un'immagine valida. Riprova con un altro URL."
+
+msgid "The file is too large. Maximum allowed size is 1MB."
+msgstr "Il file è troppo grande. La dimensione massima consentita è 1MB."
+
+msgid "Unsupported file type. Only JPG, PNG and GIF are allowed."
+msgstr "Tipo di file non supportato. Sono consentiti solo JPG, PNG e GIF."
+
+msgid "Loading avatar..."
+msgstr "Caricamento avatar in corso..."
+
+msgid "Error reading file. Please try another file or use a URL."
+msgstr "Errore durante la lettura del file. Riprova con un altro file o usa un URL."
+
+msgid "Unknown employee"
+msgstr "Dipendente sconosciuto"
+
+msgid "Unknown date"
+msgstr "Data sconosciuta"
+
+msgid "Exited"
+msgstr "È uscito"
+
+msgid "Invalid AJAX configuration."
+msgstr "Configurazione AJAX non valida."
+
+msgid "Request timed out. Reload the page to try again."
+msgstr "Richiesta scaduta. Ricarica la pagina per riprovare."
+
+msgid "Data unavailable."
+msgstr "Dati non disponibili."
+
+msgid "Invalid response format."
+msgstr "Formato risposta non valido."
+
+msgid "An unexpected error occurred."
+msgstr "Si è verificato un errore imprevisto."
+
+msgid "Theme Color"
+msgstr "Colore del Tema"
+
+msgid "Select a color for the theme. This will change the main color used throughout the app."
+msgstr "Seleziona un colore per il tema. Questo cambierà il colore principale utilizzato in tutta l'app."
+
+msgid "Save Theme Settings"
+msgstr "Salva Impostazioni Tema"
+
+msgid "Reset to Default Color"
+msgstr "Ripristina Colore Predefinito"
+
+msgid "Header Logo"
+msgstr "Logo Intestazione"
+
+msgid "Upload Logo"
+msgstr "Carica Logo"
+
+msgid "Reset to Default Logo"
+msgstr "Ripristina Logo Predefinito"
+
+msgid "Upload a custom logo for the header. The logo will be resized to maintain a height of 42px."
+msgstr "Carica un logo personalizzato per l'intestazione. Il logo verrà ridimensionato per mantenere un'altezza di 42px."
+
+msgid "Theme color has been reset to default."
+msgstr "Il colore del tema è stato ripristinato al valore predefinito."
+
+msgid "Select or Upload Logo"
+msgstr "Seleziona o Carica Logo"
+
+msgid "Use this logo"
+msgstr "Usa questo logo"
+
+msgid "Please select an image file."
+msgstr "Seleziona un file immagine."
+
+msgid "Logo has been reset to default."
+msgstr "Il logo è stato ripristinato al valore predefinito."
+
+msgid "Theme settings saved successfully"
+msgstr "Impostazioni del tema salvate con successo"
+
+msgid "Appearance"
+msgstr "Aspetto"
+
+msgid "Dark Mode"
+msgstr "Modalità Scura"
+
+msgid "You must be logged in to change settings."
+msgstr "Devi essere loggato per modificare le impostazioni."
+
+msgid "Security check failed."
+msgstr "Controllo di sicurezza fallito."
+
+msgid "Dark mode preference saved."
+msgstr "Preferenza modalità scura salvata."
+
+msgid "You have reached the maximum number of EXIT votes. New votes will replace the oldest ones."
+msgstr "Hai raggiunto il numero massimo di voti EXIT. I nuovi voti sostituiranno quelli più vecchi."
+
+msgid "Edit Vote"
+msgstr "Modifica Voto"
+
+msgid "Reset All Votes"
+msgstr "Azzera Tutti i Voti"
+
+msgid "The Fix All User Votes button has been removed because it is no longer needed"
+msgstr "Il pulsante Correggi Tutti i Voti Utente è stato rimosso perché non è più necessario"
+
+msgid "Nope"
+msgstr "Nope"
+
+msgid "JOb Exit - User Votes"
+msgstr "JOb Exit - Voti Utente"
+
+msgid "Filters"
+msgstr "Filtri"
+
+msgid "Filter by User:"
+msgstr "Filtra per Utente:"
+
+msgid "All Users"
+msgstr "Tutti gli Utenti"
+
+msgid "Filter by Employee:"
+msgstr "Filtra per Dipendente:"
+
+msgid "All Employees"
+msgstr "Tutti i Dipendenti"
+
+msgid "Apply Filters"
+msgstr "Applica Filtri"
+
+msgid "Reset Filters"
+msgstr "Reimposta Filtri"
+
+msgid "User Votes"
+msgstr "Voti Utente"
+
+msgid "User"
+msgstr "Utente"
+
+msgid "Employee"
+msgstr "Dipendente"
+
+msgid "Photo"
+msgstr "Foto"
+
+msgid "Vote Type"
+msgstr "Tipo di Voto"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Actions"
+msgstr "Azioni"
+
+msgid "Loading user votes..."
+msgstr "Caricamento voti utente..."
+
+msgid "User:"
+msgstr "Utente:"
+
+msgid "Employee:"
+msgstr "Dipendente:"
+
+msgid "Vote Type:"
+msgstr "Tipo di Voto:"
+
+msgid "Points:"
+msgstr "Punti:"
+
+msgid "Save Changes"
+msgstr "Salva Modifiche"
+
+msgid "Cancel"
+msgstr "Annulla"
+
+msgid "Reset User Votes"
+msgstr "Azzera Voti Utente"
+
+msgid "Are you sure you want to reset all votes for this user? This action cannot be undone."
+msgstr "Sei sicuro di voler azzerare tutti i voti per questo utente? Questa azione non può essere annullata."
+
+msgid "Reset Votes"
+msgstr "Azzera Voti"
+
+msgid "To confirm your score, you need to vote for all employees. Keep voting!"
+msgstr "Per confermare il tuo punteggio, devi votare tutti i dipendenti. Continua a votare!"
+
+msgid "Username and password are required."
+msgstr "Username e password sono obbligatori."
+
+msgid "Invalid username or password."
+msgstr "Username o password non validi."
+
+msgid "Login successful."
+msgstr "Accesso effettuato con successo."
+
+msgid "Username already in use."
+msgstr "Username già in uso."
+
+msgid "Email already in use."
+msgstr "Email già in uso."
+
+msgid "Registration completed successfully."
+msgstr "Registrazione completata con successo."
+
+msgid "Logout successful."
+msgstr "Logout effettuato con successo."
+
+msgid "You must be logged in to update your profile."
+msgstr "Devi essere loggato per aggiornare il profilo."
+
+msgid "Email already in use by another user."
+msgstr "Email già in uso da un altro utente."
+
+msgid "Profile updated successfully."
+msgstr "Profilo aggiornato con successo."
+
+msgid "You must be logged in to view voting data."
+msgstr "Devi essere loggato per visualizzare i dati di voto."
+
+msgid "An error occurred while loading voting data."
+msgstr "Si è verificato un errore durante il caricamento dei dati di voto."
+
+msgid "This method is no longer supported. Use direct upload via base64."
+msgstr "Questo metodo non è più supportato. Usa il caricamento diretto tramite base64."
+
+msgid "You must be logged in to delete your account."
+msgstr "Devi essere loggato per eliminare il tuo account."
+
+msgid "Administrators cannot delete their account from this interface."
+msgstr "Gli amministratori non possono eliminare il proprio account da questa interfaccia."
+
+msgid "Account deleted successfully."
+msgstr "Account eliminato con successo."
+
+msgid "An error occurred while deleting the account."
+msgstr "Si è verificato un errore durante l'eliminazione dell'account."
+
+msgid "You must be logged in to check cooldown."
+msgstr "Devi essere loggato per verificare il cooldown."
+
+msgid "You must be logged in to set cooldown."
+msgstr "Devi essere loggato per impostare il cooldown."
+
+msgid "Cooldown set successfully."
+msgstr "Cooldown impostato con successo."
+
+msgid "Error setting cooldown."
+msgstr "Errore nell'impostazione del cooldown."
+
+msgid "You must be logged in to get vote count."
+msgstr "Devi essere loggato per ottenere il conteggio dei voti."
+
+msgid "Mark as read"
+msgstr "Segna come letto"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Changelog"
+msgstr "Changelog"
+
+msgid "Loading changelog..."
+msgstr "Caricamento changelog..."
+
+msgid "Login Required"
+msgstr "Login richiesto"
+
+msgid "Please login to view notifications."
+msgstr "Effettua il login per visualizzare le notifiche."
+
+msgid "No Notifications"
+msgstr "Nessuna notifica"
+
+msgid "You have no new notifications."
+msgstr "Non hai nuove notifiche."
+
+msgid "In Team"
+msgstr "In Squadra"
+
+msgid "Card"
+msgstr "Carta"
+
+msgid "of"
+msgstr "di"
+
+# Messaggi ironici per EXIT
+msgid "It will be a great loss... or maybe not 😅"
+msgstr "Sarà una grande perdita... o forse no 😅"
+
+msgid "Another talent leaving... towards the exit! 😏"
+msgstr "Un altro talento che se ne va... verso l'uscita! 😏"
+
+msgid "Promotion pending... to the door! 😕"
+msgstr "Promozione in sospeso... verso la porta! 😕"
+
+msgid "Someone prepare the reference letter... very short! 😉"
+msgstr "Qualcuno prepari la lettera di referenze... molto breve! 😉"
+
+msgid "Their JOby is already deactivated! 😜"
+msgstr "Il suo JOby è già disattivato! 😜"
+
+msgid "Their desk is already free! 🙋"
+msgstr "La sua scrivania è già libera! 🙋"
+
+msgid "Goodbye, we won't miss you... much! 😊"
+msgstr "Addio, non ci mancherai... molto! 😊"
+
+msgid "This is why you should never get too attached to colleagues! 😂"
+msgstr "Ecco perché non dovresti mai affezionarti troppo ai colleghi! 😂"
+
+msgid "Let's see who will be next... 😈"
+msgstr "Vediamo chi sarà il prossimo... 😈"
+
+msgid "One less problem for the HR office! 😎"
+msgstr "Un problema in meno per l'ufficio HR! 😎"
+
+# Messaggi ironici per NOPE
+msgid "Saved by a hair... this time! 🙌"
+msgstr "Salvato per un pelo... questa volta! 🙌"
+
+msgid "Survived for another day! 😍"
+msgstr "Sopravvissuto per un altro giorno! 😍"
+
+msgid "Their luck won't last forever... 😝"
+msgstr "La sua fortuna non durerà per sempre... 😝"
+
+msgid "Stays... for now! 😎"
+msgstr "Rimane... per ora! 😎"
+
+msgid "Today is their lucky day! 😉"
+msgstr "Oggi è il suo giorno fortunato! 😉"
+
+msgid "Escaped firing... for this time! 😁"
+msgstr "Scampato al licenziamento... per questa volta! 😁"
+
+msgid "Someone up there is protecting them! 😊"
+msgstr "Qualcuno lassù lo sta proteggendo! 😊"
+
+msgid "Will continue to occupy their desk... for now! 😬"
+msgstr "Continuerà a occupare la sua scrivania... per ora! 😬"
+
+msgid "Still safe... but we'll keep an eye on them! 🙂"
+msgstr "Ancora al sicuro... ma lo terremo d'occhio! 🙂"
+
+msgid "Avoided the worst... at least for today! 😏"
+msgstr "Ha evitato il peggio... almeno per oggi! 😏"
+
+# Backend Notifications
+msgid "JOb Exit - Notifications"
+msgstr "JOb Exit - Notifiche"
+
+msgid "Add New Notification"
+msgstr "Aggiungi Nuova Notifica"
+
+msgid "Title"
+msgstr "Titolo"
+
+msgid "Loading notifications..."
+msgstr "Caricamento notifiche..."
+
+msgid "Edit"
+msgstr "Modifica"
+
+msgid "Delete"
+msgstr "Elimina"
+
+msgid "Edit Notification"
+msgstr "Modifica Notifica"
+
+msgid "Content"
+msgstr "Contenuto"
+
+msgid "Save"
+msgstr "Salva"
+
+msgid "Error loading notifications."
+msgstr "Errore durante il caricamento delle notifiche."
+
+msgid "An error occurred while loading notifications."
+msgstr "Si è verificato un errore durante il caricamento delle notifiche."
+
+msgid "Error loading notification."
+msgstr "Errore durante il caricamento della notifica."
+
+msgid "Notification saved successfully."
+msgstr "Notifica salvata con successo."
+
+msgid "Error saving notification."
+msgstr "Errore durante il salvataggio della notifica."
+
+msgid "An error occurred while saving notification."
+msgstr "Si è verificato un errore durante il salvataggio della notifica."
+
+msgid "Are you sure you want to delete this notification?"
+msgstr "Sei sicuro di voler eliminare questa notifica?"
+
+msgid "Notification deleted successfully."
+msgstr "Notifica eliminata con successo."
+
+msgid "Error deleting notification."
+msgstr "Errore durante l'eliminazione della notifica."
+
+msgid "An error occurred while deleting notification."
+msgstr "Si è verificato un errore durante l'eliminazione della notifica."
+
+# Backend Changelog
+msgid "JOb Exit - Changelog"
+msgstr "JOb Exit - Changelog"
+
+msgid "Edit the changelog content below. This will be displayed to users in the app."
+msgstr "Modifica il contenuto del changelog qui sotto. Questo sarà visualizzato agli utenti nell'app."
+
+msgid "Save Changelog"
+msgstr "Salva Changelog"
+
+msgid "Error loading changelog."
+msgstr "Errore durante il caricamento del changelog."
+
+msgid "An error occurred while loading changelog."
+msgstr "Si è verificato un errore durante il caricamento del changelog."
+
+msgid "Changelog saved successfully."
+msgstr "Changelog salvato con successo."
+
+msgid "Error saving changelog."
+msgstr "Errore durante il salvataggio del changelog."
+
+msgid "An error occurred while saving changelog."
+msgstr "Si è verificato un errore durante il salvataggio del changelog."
+
+msgid "You do not have permission to perform this action."
+msgstr "Non hai il permesso di eseguire questa azione."
+
+msgid "Content is required."
+msgstr "Il contenuto è obbligatorio."
+
+msgid "Failed to update changelog."
+msgstr "Impossibile aggiornare il changelog."

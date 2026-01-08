@@ -1,0 +1,2713 @@
+/**
+ * Public styles for JO Exit Plugin
+ */
+
+/* Hide widget area */
+.widget-area {
+    display: none !important;
+}
+
+/* Main container */
+.jo-exit-container {
+    max-width: 480px;
+    margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    height: 80vh;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* App header */
+.jo-exit-header {
+    background-color: #ff4757;
+    color: white;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-right:20px;
+    padding-left: 20px;
+    font-weight: bold;
+    font-size: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    max-width: 480px;
+    margin: 0 auto;
+    /* Border radius removed */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.jo-exit-logo {
+    max-width: 80px;
+}
+
+.jo-exit-header-title {
+    text-align: left;
+}
+
+.jo-exit-header-icon {
+    font-size: 22px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Notification bell icon */
+.jo-exit-notification-bell {
+    position: relative;
+    display: inline-block;
+}
+
+.jo-exit-notification-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ff4757;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Notification popup */
+.jo-exit-notification-popup {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 300px;
+    max-height: 400px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+}
+
+.jo-exit-notification-header {
+    padding: 15px;
+    border-bottom: 1px solid #e1e4e8;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.jo-exit-notification-list {
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.jo-exit-notification-item {
+    padding: 15px;
+    border-bottom: 1px solid #f1f3f5;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.jo-exit-notification-item:hover {
+    background-color: #f8f9fa;
+}
+
+.jo-exit-notification-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.jo-exit-notification-preview {
+    font-size: 14px;
+    color: #6c757d;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.jo-exit-notification-date {
+    font-size: 12px;
+    color: #adb5bd;
+    margin-top: 5px;
+}
+
+.jo-exit-notification-footer {
+    padding: 10px;
+    border-top: 1px solid #e1e4e8;
+    display: flex;
+    justify-content: space-between;
+}
+
+.jo-exit-notification-button {
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    color: #495057;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: center;
+    flex: 1;
+    margin: 0 5px;
+}
+
+.jo-exit-notification-button:hover {
+    background-color: #e9ecef;
+}
+
+/* Notification content popup overlay */
+.jo-exit-notification-content-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    display: none;
+}
+
+/* Dark mode for overlay */
+.jo-exit-dark-mode .jo-exit-notification-content-popup-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Notification content popup */
+.jo-exit-notification-content-popup-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border-top: 3px solid var(--theme-color, #ff4757);
+    padding: 0;
+    margin: 0;
+}
+
+/* Dark mode for popup - keeping popup with light background */
+.jo-exit-dark-mode .jo-exit-notification-content-popup-wrapper {
+    background-color: white;
+    color: #333;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border-color: var(--theme-color, #ff4757);
+}
+
+.jo-exit-notification-content-popup-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e1e4e8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}
+
+/* Dark mode for popup header */
+.jo-exit-dark-mode .jo-exit-notification-content-popup-header {
+    background-color: var(--dark-card-bg);
+    border-bottom-color: var(--dark-border);
+}
+
+.jo-exit-notification-content-popup-title {
+    font-weight: bold;
+    font-size: 18px;
+    color: var(--theme-color, #ff4757);
+    text-align: center;
+}
+
+/* Dark mode for popup title */
+.jo-exit-dark-mode .jo-exit-notification-content-popup-title {
+    color: var(--theme-color, #ff4757);
+}
+
+/* Close button removed */
+
+.jo-exit-notification-content-popup-body {
+    padding: 0;
+    overflow-y: auto;
+    max-height: calc(80vh - 20px);
+    line-height: 1.6;
+    color: #333;
+    font-size: 16px;
+    background-color: white;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Dark mode for popup body */
+.jo-exit-dark-mode .jo-exit-notification-content-popup-body {
+    background-color: var(--dark-card-bg);
+    color: var(--dark-text);
+}
+
+.jo-exit-notification-content-popup-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #e1e4e8;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+}
+
+/* Dark mode for popup footer */
+.jo-exit-dark-mode .jo-exit-notification-content-popup-footer {
+    background-color: var(--dark-card-bg);
+    border-top-color: var(--dark-border);
+}
+
+.jo-exit-mark-read-button {
+    background-color: var(--theme-color, #ff4757);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 250px;
+}
+
+.jo-exit-mark-read-button i {
+    margin-right: 8px;
+}
+
+.jo-exit-mark-read-button:hover {
+    background-color: #e03e4e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Notification title and content */
+.jo-exit-notification-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.jo-exit-notification-content {
+    padding: 0 5px;
+    line-height: 1.6;
+    color: #333;
+    font-size: 16px;
+}
+
+/* Rimosso duplicato */
+
+/* Rimosso duplicato */
+
+/* Changelog screen */
+#jo-exit-changelog-screen {
+    width: 100%;
+    background-color: white;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Dark mode for changelog screen */
+.jo-exit-dark-mode #jo-exit-changelog-screen {
+    background-color: var(--dark-card-bg);
+    color: var(--dark-text);
+}
+
+/* Back button for changelog */
+.jo-exit-back-button {
+    display: inline-block;
+    padding: 8px 15px;
+    margin-bottom: 15px;
+    background-color: #f8f9fa;
+    color: #495057;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.jo-exit-back-button:hover {
+    background-color: #e9ecef;
+}
+
+.jo-exit-back-button i {
+    margin-right: 5px;
+}
+
+/* Dark mode for back button */
+.jo-exit-dark-mode .jo-exit-back-button {
+    background-color: var(--dark-input-bg);
+    color: var(--dark-text);
+    box-shadow: 0 1px 3px var(--dark-shadow);
+}
+
+.jo-exit-dark-mode .jo-exit-back-button:hover {
+    background-color: var(--dark-hover);
+}
+
+.jo-exit-changelog-title {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.jo-exit-changelog-close {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.jo-exit-changelog-content {
+    line-height: 1.6;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Dark mode for changelog content */
+.jo-exit-dark-mode .jo-exit-changelog-content {
+    color: var(--dark-text);
+    padding-top: 30px;
+}
+
+/* Dark mode for links in changelog */
+.jo-exit-dark-mode .jo-exit-changelog-content a {
+    color: var(--theme-color);
+}
+
+/* Dark mode for headings in changelog */
+.jo-exit-dark-mode .jo-exit-changelog-content h1,
+.jo-exit-dark-mode .jo-exit-changelog-content h2,
+.jo-exit-dark-mode .jo-exit-changelog-content h3,
+.jo-exit-dark-mode .jo-exit-changelog-content h4,
+.jo-exit-dark-mode .jo-exit-changelog-content h5,
+.jo-exit-dark-mode .jo-exit-changelog-content h6 {
+    color: var(--dark-text);
+}
+
+/* Dark mode for lists in changelog */
+.jo-exit-dark-mode .jo-exit-changelog-content ul,
+.jo-exit-dark-mode .jo-exit-changelog-content ol {
+    color: var(--dark-text);
+}
+
+/* Dark mode for code blocks in changelog */
+.jo-exit-dark-mode .jo-exit-changelog-content pre,
+.jo-exit-dark-mode .jo-exit-changelog-content code {
+    background-color: var(--dark-input-bg);
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+}
+
+/* Content area */
+.jo-exit-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    padding: 20px;
+    padding-top: 70px; /* Space for fixed header */
+    padding-bottom: 70px; /* Space for fixed bottom nav */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 250px; /* Ensure minimum width on small screens */
+    background-color: #ff000003;
+}
+
+/* Bottom navigation */
+.jo-exit-bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    padding: 10px 0;
+    border-top: 1px solid #e1e4e8;
+    z-index: 100;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.jo-exit-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.jo-exit-nav-item.active {
+    color: #ff4757;
+}
+
+.jo-exit-nav-icon {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.jo-exit-nav-avatar {
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.jo-exit-nav-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Home screen (swipe interface) */
+.jo-exit-card-container {
+    width: 40vh;
+    height: 60vh; /* Reduced height */
+    min-height: 400px; /* Increased minimum height */
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto; /* Center horizontally */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.jo-exit-card {
+    width: 95%;
+    max-width: 38vh;
+    min-width: 250px;
+    height: 85%;
+    max-height: 600px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: none; /* No transition by default - will be added dynamically */
+    cursor: grab !important; /* Show grab cursor to indicate draggable */
+    touch-action: none !important; /* Disable browser touch actions completely */
+    user-select: none !important; /* Prevent text selection during drag */
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    will-change: transform; /* Optimize for animations */
+    z-index: 10; /* Ensure card is above other elements */
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    transform-origin: center !important; /* Ensure consistent rotation */
+}
+
+.jo-exit-card-photo {
+    width: 100%;
+    height: 80%;
+    object-fit: cover;
+    object-position: center top; /* Align to top for better face visibility */
+    display: block;
+}
+
+.jo-exit-card-info {
+    padding: 15px;
+    flex: 1;
+}
+
+.jo-exit-card-name {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Role field removed */
+
+.jo-exit-card-code {
+    font-size: 14px;
+    color: #adb5bd;
+}
+
+.jo-exit-card-years {
+    font-size: 14px;
+    color: #6c757d;
+    margin-top: 5px;
+    font-style: italic;
+    display: block !important; /* Force display */
+    visibility: visible !important; /* Ensure visibility */
+}
+
+.jo-exit-swipe-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0;
+    position: relative;
+    z-index: 5;
+}
+
+/* Vote counter */
+.jo-exit-votes-counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    background-color: #f8f9fa;
+    border-radius: 20px;
+    padding: 8px 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 0 10px;
+}
+
+/* Limit message */
+.jo-exit-limit-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #856404;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin: 15px auto;
+    max-width: 90%;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.jo-exit-limit-message-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.jo-exit-limit-message i {
+    margin-right: 8px;
+    color: #ff4757;
+    font-size: 16px;
+}
+
+/* Dark mode for limit message */
+.jo-exit-dark-mode .jo-exit-limit-message {
+    color: #ffeeba;
+    background-color: #533f03;
+    border-color: #856404;
+}
+
+/* Dark mode for vote counter */
+.jo-exit-dark-mode .jo-exit-votes-counter {
+    background-color: #2d3436;
+    color: #f8f9fa;
+}
+
+.jo-exit-swipe-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.jo-exit-like-button {
+    background-color: #ff4757;
+    color: white;
+}
+
+.jo-exit-exit-button {
+    background-color: #28a745; /* Verde */
+    color: white;
+}
+
+.jo-exit-no-cards {
+    width: 95%;
+    max-width: 38vh;
+    min-width: 250px;
+    min-height: 200px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    color: #6c757d;
+    margin: 0 auto;
+    z-index: 10;
+}
+
+.jo-exit-no-cards p {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+/* Hide reload button if it exists */
+.jo-exit-reload-button {
+    display: none;
+}
+
+/* Leaderboard screen */
+.jo-exit-leaderboard {
+    width: 40vh;
+    margin: 0 auto; /* Center horizontally */
+    padding-top: 30px;
+}
+
+.jo-exit-leaderboard-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.jo-exit-leaderboard-rank {
+    width: 30px;
+    height: 30px;
+    background-color: #ff4757;
+    color: white !important; /* Always white text */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.jo-exit-leaderboard-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.jo-exit-leaderboard-info {
+    flex: 1;
+}
+
+.jo-exit-leaderboard-name {
+    font-weight: bold;
+}
+
+.jo-exit-leaderboard-code {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.jo-exit-leaderboard-years {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 3px;
+    font-style: italic;
+}
+
+.jo-exit-leaderboard-score {
+    font-weight: bold;
+    color: #ff4757;
+    font-size: 18px;
+}
+
+/* Exited employees screen */
+.jo-exit-exited {
+    width: 40vh;
+    margin: 0 auto; /* Center horizontally */
+    padding-top: 30px;
+}
+
+/* Exited employee final score */
+.jo-exit-exited-final-score-info {
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+    border-top: 1px solid #e1e4e8;
+}
+
+.jo-exit-exited-final-score-label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.jo-exit-exited-final-score-desc {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* Player score styles */
+.jo-exit-exited-player-score {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #e1e4e8;
+}
+
+.jo-exit-exited-player-score-label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.jo-exit-exited-player-score-value {
+    font-size: 1em;
+    color: #ff4757;
+    font-weight: bold;
+}
+
+/* Top players styles */
+.jo-exit-exited-top-players {
+
+}
+
+.jo-exit-exited-top-players-label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.jo-exit-exited-top-player {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.jo-exit-exited-top-player-rank {
+    width: 20px;
+    font-weight: bold;
+    color: #666;
+}
+
+.jo-exit-exited-top-player-name {
+    flex: 1;
+    font-weight: bold;
+}
+
+.jo-exit-exited-top-player-score {
+    color: #28a745;
+    font-weight: bold;
+}
+
+/* Exited employee winner */
+.jo-exit-exited-winner {
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+    border-top: 1px solid #e1e4e8;
+}
+
+.jo-exit-exited-winner-label {
+    font-weight: bold;
+    color: #ff4757;
+    margin-bottom: 5px;
+}
+
+.jo-exit-exited-winner-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.jo-exit-exited-winner-name {
+    font-weight: bold;
+}
+
+.jo-exit-exited-winner-points {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.jo-exit-exited-no-winner .jo-exit-exited-winner-name,
+.jo-exit-exited-no-winner .jo-exit-exited-winner-points {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Stili per la schermata Exit rimossi per evitare conflitti */
+
+/* Loading indicator */
+.jo-exit-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #6c757d;
+}
+
+/* No cards message */
+.jo-exit-no-cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #6c757d;
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    line-height: 1.5;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin: 20px;
+}
+
+/* Card animation */
+.jo-exit-card-animate-in {
+    animation: cardAnimateIn 0.5s ease-out forwards;
+    pointer-events: none; /* Disable interaction during animation */
+}
+
+@keyframes cardAnimateIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Ironic comment container */
+.jo-exit-comment-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* Ironic comment */
+.jo-exit-comment {
+    background-color: #ff4757 !important; /* Default theme color */
+    color: white !important; /* Always white text */
+    padding: 20px 25px; /* Increased padding */
+    border-radius: 12px; /* Slightly reduced border radius */
+}
+
+/* Login required message */
+.jo-exit-login-required {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 90%;
+}
+
+.jo-exit-login-icon {
+    font-size: 50px;
+    color: #ff4757;
+    margin-bottom: 20px;
+}
+
+.jo-exit-login-required h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.jo-exit-login-required p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+    color: #6c757d;
+}
+
+.jo-exit-login-button {
+    background-color: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.jo-exit-login-button:hover {
+    background-color: #e03e4e;
+}
+
+/* Cooldown message */
+.jo-exit-cooldown-required {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 90%;
+}
+
+.jo-exit-cooldown-icon {
+    font-size: 50px;
+    color: #ff4757;
+    margin-bottom: 20px;
+}
+
+.jo-exit-cooldown-required h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.jo-exit-cooldown-required p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+    color: #6c757d;
+}
+
+.jo-exit-cooldown-timer {
+    font-size: 36px;
+    font-weight: bold;
+    color: #ff4757;
+    margin-top: 10px;
+    font-family: monospace;
+}
+
+.jo-exit-comment {
+    background-color: #ff4757 !important; /* Default theme color */
+    color: white !important; /* Always white text */
+    padding: 20px 25px; /* Increased padding */
+    border-radius: 12px; /* Slightly reduced border radius */
+    font-size: 20px; /* Increased font size */
+    font-weight: bold;
+    text-align: center;
+    max-width: 75%; /* Further reduced max width */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); /* Enhanced shadow */
+    width: auto; /* Auto width based on content */
+    min-width: 200px; /* Reduced minimum width */
+    max-height: 80vh; /* Limit height to 80% of viewport height */
+    overflow-y: auto; /* Add scrolling if needed */
+    line-height: 1.3; /* Slightly reduced line height */
+    pointer-events: none; /* Prevent interaction with the comment */
+    word-wrap: break-word; /* Break long words */
+    hyphens: auto; /* Enable hyphenation */
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+/* Animation from center */
+.jo-exit-comment-animate-from-center {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Animation from bottom */
+.jo-exit-comment-animate-from-bottom {
+    transform: translateY(30px) scale(0.8);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Visible state */
+.jo-exit-comment-visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Visible state for bottom animation */
+.jo-exit-comment-animate-from-bottom.jo-exit-comment-visible {
+    transform: translateY(0) scale(1);
+}
+
+/* Reload button */
+.jo-exit-reload-button {
+    background-color: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.jo-exit-reload-button:hover {
+    background-color: #e03e4a;
+}
+
+.jo-exit-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #ff4757;
+    width: 40px;
+    height: 40px;
+    animation: jo-exit-spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes jo-exit-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Swipe animations */
+.jo-exit-swipe-left {
+    animation: jo-exit-swipe-left 0.5s forwards;
+    position: relative; /* Ensure position context */
+    z-index: 5; /* Keep above other cards during animation */
+}
+
+.jo-exit-swipe-right {
+    animation: jo-exit-swipe-right 0.5s forwards;
+    position: relative; /* Ensure position context */
+    z-index: 5; /* Keep above other cards during animation */
+}
+
+/* Swipe indicators */
+.jo-exit-swipe-indicator {
+    position: absolute;
+    top: 50px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 32px; /* Larger font */
+    color: white;
+    transform: rotate(-20deg);
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease; /* Faster transition */
+    z-index: 100; /* Higher z-index to ensure visibility */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    pointer-events: none; /* Don't interfere with touch events */
+    transform-origin: center center; /* Consistent rotation */
+}
+
+.jo-exit-like-indicator {
+    right: 40px; /* Moved to right */
+    background-color: #4CAF50; /* Green */
+    border: 2px solid #45a049;
+}
+
+.jo-exit-exit-indicator {
+    left: 40px; /* Moved to left */
+    background-color: #ff4757; /* Red */
+    border: 2px solid #e03e4a;
+}
+
+.jo-exit-card.swiping-left .jo-exit-like-indicator {
+    opacity: 1;
+    transform: rotate(-20deg) scale(1.1);
+}
+
+.jo-exit-card.swiping-right .jo-exit-exit-indicator {
+    opacity: 1;
+    transform: rotate(-20deg) scale(1.1);
+}
+
+/* Dragging state */
+.jo-exit-dragging {
+    cursor: grabbing !important;
+    z-index: 100;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important; /* Enhanced shadow during drag */
+    transition: none !important; /* No transition during drag for immediate response */
+    transform-origin: center center !important; /* Ensure rotation happens from center */
+    pointer-events: auto !important; /* Ensure events are captured */
+}
+
+@keyframes jo-exit-swipe-left {
+    to {
+        transform: translate(-150%, -50%) rotate(-20deg);
+        opacity: 0;
+    }
+}
+
+@keyframes jo-exit-swipe-right {
+    to {
+        transform: translate(150%, -50%) rotate(20deg);
+        opacity: 0;
+    }
+}
+
+/* Info screen styles */
+.jo-exit-info-container {
+    padding: 20px;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.jo-exit-info-section {
+    margin-bottom: 25px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    border-left: 4px solid #ff4757;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.jo-exit-info-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.jo-exit-info-container h2 {
+    color: #ff4757;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    padding-bottom: 10px;
+    border-bottom: 2px dashed #ff4757;
+}
+
+.jo-exit-info-container h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.jo-exit-info-container p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+    color: #444;
+    font-size: 16px;
+}
+
+.jo-exit-info-container strong {
+    color: #ff4757;
+    font-weight: bold;
+}
+
+.jo-exit-info-container ol,
+.jo-exit-info-container ul {
+    padding-left: 25px;
+    margin-bottom: 15px;
+}
+
+.jo-exit-info-container li {
+    margin-bottom: 12px;
+    line-height: 1.6;
+    color: #444;
+    position: relative;
+    font-size: 16px;
+}
+
+.jo-exit-info-container ul li {
+    list-style-type: none;
+    padding-left: 5px;
+}
+
+.jo-exit-info-container ul li:before {
+    content: '•';
+    color: #ff4757;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    font-size: 1.2em;
+}
+
+/* Highlight important sections */
+.jo-exit-info-section:nth-child(3),
+.jo-exit-info-section:nth-child(6) {
+    background-color: #fff9f9;
+    border-left: 4px solid #ff4757;
+}
+
+.jo-exit-info-section:nth-child(9) {
+    background-color: #fff9e6;
+    border-left: 4px solid #ffc107;
+}
+
+/* Last section with call to action */
+.jo-exit-info-section:last-child {
+    background-color: #f0f9ff;
+    border-left: 4px solid #007bff;
+    text-align: center;
+}
+
+.jo-exit-info-section:last-child p:last-child {
+    font-weight: bold;
+    font-size: 18px;
+    color: #007bff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .jo-exit-container {
+        height: 90vh;
+        border-radius: 0;
+        box-shadow: none;
+    }
+}
+
+/* Swiper overrides */
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Message styles */
+.jo-exit-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    z-index: 1000;
+    animation: jo-exit-fade-out 3s forwards;
+}
+
+@keyframes jo-exit-fade-out {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.jo-exit-screen {
+    padding-bottom: 50px;
+}
+
+/* Account screen */
+.jo-exit-account-container,
+.jo-exit-register-container,
+.jo-exit-edit-profile-container {
+    width: 40vh;
+    max-width: 40vh;
+    margin: 0 auto;
+    padding-top:30px;
+}
+
+.jo-exit-account-profile {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.jo-exit-account-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 20px;
+}
+
+.jo-exit-account-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.jo-exit-account-info {
+    flex: 1;
+}
+
+.jo-exit-account-info h2 {
+    margin: 0 0 5px 0;
+    font-size: 20px;
+}
+
+.jo-exit-account-info p {
+    margin: 0;
+    color: #6c757d;
+}
+
+.jo-exit-account-exp {
+    font-weight: bold !important;
+    color: #ff4757 !important;
+    font-size: 1.2em !important;
+    background-color: #f8f9fa;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.jo-exit-account-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    gap: 10px;
+    width: 100%;
+}
+
+.jo-exit-button-edit {
+    background-color: #4CAF50;
+    flex: 1;
+    text-align: center;
+    border-radius: 30px;
+    padding: 12px 20px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.jo-exit-button-edit:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jo-exit-button-logout {
+    background-color: #ff4757;
+    flex: 1;
+    text-align: center;
+    border-radius: 30px;
+    padding: 12px 20px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    width: auto;
+    margin-top: 0;
+}
+
+.jo-exit-button-logout:hover {
+    background-color: #ff3040;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jo-exit-account-section {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.jo-exit-account-section h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #e1e4e8;
+    padding-bottom: 10px;
+}
+
+.jo-exit-account-points-total {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff4757;
+}
+
+.jo-exit-account-voted-employees {
+    margin-top: 10px;
+}
+
+.jo-exit-voted-employee {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e1e4e8;
+    position: relative;
+}
+
+.jo-exit-voted-employee:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.jo-exit-voted-employee-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.jo-exit-voted-employee-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.jo-exit-voted-employee-info {
+    flex: 1;
+}
+
+.jo-exit-voted-employee-name {
+    font-weight: bold;
+}
+
+.jo-exit-voted-employee-points {
+    color: #ff4757;
+    font-size: 14px;
+}
+
+/* Stile per i voti di tipo 'nope' */
+.jo-exit-voted-exit .jo-exit-voted-employee-points {
+    color: #28a745 !important;
+}
+
+.jo-exit-voted-exit .jo-exit-voted-employee-photo img {
+    filter: grayscale(100%);
+}
+
+/* Stile per il pulsante di cancellazione voto */
+.jo-exit-voted-employee-actions {
+    margin-left: 10px;
+}
+
+.jo-exit-delete-vote {
+    background-color: transparent;
+    border: none;
+    color: #ff4757;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.jo-exit-delete-vote:hover {
+    background-color: rgba(255, 71, 87, 0.1);
+    transform: scale(1.1);
+}
+
+.jo-exit-voted-exit .jo-exit-delete-vote {
+    color: #28a745;
+}
+
+.jo-exit-voted-exit .jo-exit-delete-vote:hover {
+    background-color: rgba(40, 167, 69, 0.1);
+}
+
+/* Stile per il messaggio di errore */
+.jo-exit-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Forms */
+
+.jo-exit-login-form {
+    width: 100%;
+}
+
+.jo-exit-login-form,
+.jo-exit-register-form,
+.jo-exit-edit-profile-container {
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.jo-exit-form-group {
+    margin-bottom: 20px;
+}
+
+.jo-exit-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.jo-exit-form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.jo-exit-form-help {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+.jo-exit-form-message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+}
+
+.jo-exit-form-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    display: block;
+}
+
+.jo-exit-form-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    display: block;
+}
+
+/* Debug info styles */
+.jo-exit-debug-info {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 12px;
+    max-height: 200px;
+    overflow: auto;
+}
+
+.jo-exit-debug-info pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.jo-exit-register-link,
+.jo-exit-login-link {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.jo-exit-button {
+    background-color: #ff4757;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.jo-exit-button:hover {
+    background-color: #ff3040;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jo-exit-button-secondary {
+    background-color: #6c757d;
+}
+
+.jo-exit-button-secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jo-exit-button-danger {
+    background-color: #dc3545;
+}
+
+.jo-exit-button-danger:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Stile del pulsante logout è stato spostato nella sezione dei pulsanti account */
+
+/* Exited employees screen */
+.jo-exit-exit-table-container {
+    width: 40vh;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+.jo-exit-exit-table-container h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: var(--theme-color, #ff4757);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.jo-exit-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    font-size: 14px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.jo-exit-table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.jo-exit-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.jo-exit-table tr:last-child td {
+    border-bottom: none;
+}
+
+.jo-exit-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.jo-exit-no-data {
+    text-align: center;
+    padding: 20px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Leaderboard Trophy Screen */
+.jo-exit-leaderboard-trophy {
+    width: 100%;
+    max-width: 40vh;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.jo-exit-leaderboard-trophy-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.jo-exit-leaderboard-trophy-section {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.jo-exit-leaderboard-trophy-header {
+    background-color: var(--theme-color, #ff4757);
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.jo-exit-leaderboard-trophy-date {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 5px;
+}
+
+.jo-exit-leaderboard-trophy-employee {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.jo-exit-leaderboard-trophy-podium {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+}
+
+.jo-exit-leaderboard-trophy-position {
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px;
+    position: relative;
+}
+
+.jo-exit-leaderboard-trophy-position.gold {
+    background-color: rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.5);
+}
+
+.jo-exit-leaderboard-trophy-position.silver {
+    background-color: rgba(192, 192, 192, 0.15);
+    border: 1px solid rgba(192, 192, 192, 0.5);
+}
+
+.jo-exit-leaderboard-trophy-position.bronze {
+    background-color: rgba(205, 127, 50, 0.15);
+    border: 1px solid rgba(205, 127, 50, 0.5);
+}
+
+.jo-exit-leaderboard-trophy-rank {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.jo-exit-leaderboard-trophy-player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.jo-exit-leaderboard-trophy-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.jo-exit-leaderboard-trophy-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.jo-exit-leaderboard-trophy-name {
+    font-weight: bold;
+}
+
+.jo-exit-leaderboard-trophy-points {
+    font-size: 14px;
+    color: #666;
+    text-align: right;
+}
+
+.jo-exit-leaderboard-trophy-empty {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+
+.jo-exit-empty-message {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    font-style: italic;
+}
+
+/* User leaderboard styles */
+.jo-exit-leaderboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 40vh;
+    max-width: 40vh;
+    margin: 0 auto;
+    padding-top:30px;
+}
+
+.jo-exit-leaderboard-title {
+    text-align: center;
+    margin-bottom: 10px;
+    color: var(--theme-color, #ff4757);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.jo-exit-leaderboard-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.jo-exit-leaderboard-item.gold {
+    background-color: rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.5);
+}
+
+.jo-exit-leaderboard-item.silver {
+    background-color: rgba(192, 192, 192, 0.15);
+    border: 1px solid rgba(192, 192, 192, 0.5);
+}
+
+.jo-exit-leaderboard-item.bronze {
+    background-color: rgba(205, 127, 50, 0.15);
+    border: 1px solid rgba(205, 127, 50, 0.5);
+}
+
+.jo-exit-leaderboard-rank {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border-radius: 50%;
+    font-weight: bold;
+    color: #333;
+    margin-right: 15px;
+}
+
+.jo-exit-leaderboard-user {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.jo-exit-leaderboard-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.jo-exit-leaderboard-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.jo-exit-leaderboard-exp {
+    font-weight: bold;
+    color: #ff4757;
+    font-size: 1.2em;
+    margin-left: auto;
+}
+
+.jo-exit-exited-item {
+    margin-bottom: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #e1e4e8;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.jo-exit-exited-item:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.jo-exit-exited-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    flex-shrink: 0;
+    filter: grayscale(100%);
+}
+
+.jo-exit-exited-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.jo-exit-exited-top-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.jo-exit-exited-bottom-info {
+    display: flex;
+    align-items: flex-start;
+}
+
+.jo-exit-exited-date {
+    font-size: 12px;
+    color: #6c757d;
+    text-align: left;
+    line-height: 1.3;
+}
+
+.jo-exit-exited-score {
+    font-weight: bold;
+    color: #ff4757;
+    font-size: 20px;
+    text-align: right;
+}
+
+.jo-exit-exited-info {
+    flex: 1;
+}
+
+.jo-exit-exited-name {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.jo-exit-exited-code {
+    font-size: 13px;
+    color: #6c757d;
+    margin-bottom: 3px;
+}
+
+.jo-exit-exited-years {
+    color: #6c757d;
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+.jo-exit-no-data {
+    text-align: center;
+    padding: 30px;
+    color: #6c757d;
+    font-size: 16px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.jo-exit-delete-account-section {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f8d7da;
+    border-radius: 10px;
+    border: 1px solid #f5c6cb;
+}
+
+.jo-exit-delete-account-section h3 {
+    color: #721c24;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.jo-exit-delete-account-section p {
+    color: #721c24;
+    margin-bottom: 15px;
+}
+
+.jo-exit-avatar-help {
+    margin: 15px 0;
+}
+
+.jo-exit-avatar-url-container {
+    margin-top: 15px;
+}
+
+.jo-exit-avatar-url-input {
+    display: flex;
+}
+
+.jo-exit-avatar-url-input input {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.jo-exit-avatar-container {
+    margin-top: 15px;
+}
+
+.jo-exit-avatar-buttons {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.jo-exit-or {
+    margin: 0 10px;
+    color: #6c757d;
+}
+
+#jo-exit-avatar-preview {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Account screen */
+.jo-exit-account-container {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* Dark mode toggle switch */
+.jo-exit-theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Appearance section in edit profile */
+.jo-exit-appearance-section {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #e1e4e8;
+    display: block;
+    visibility: visible;
+    opacity: 1;
+}
+
+.jo-exit-appearance-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e1e4e8;
+    padding-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+    display: block;
+}
+
+.jo-exit-appearance-section .jo-exit-theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+}
+
+.jo-exit-dark-mode-label {
+    font-weight: bold;
+    display: inline-block;
+}
+
+.jo-exit-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    visibility: visible;
+    opacity: 1;
+}
+
+.jo-exit-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.jo-exit-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    display: block;
+    visibility: visible;
+    opacity: 1;
+}
+
+.jo-exit-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    display: block;
+    visibility: visible;
+    opacity: 1;
+}
+
+input:checked + .jo-exit-slider {
+    background-color: var(--theme-color, #ff4757);
+}
+
+input:focus + .jo-exit-slider {
+    box-shadow: 0 0 1px var(--theme-color, #ff4757);
+}
+
+input:checked + .jo-exit-slider:before {
+    transform: translateX(26px);
+}
+
+.jo-exit-slider.round {
+    border-radius: 34px;
+}
+
+.jo-exit-slider.round:before {
+    border-radius: 50%;
+}
+
+/* Dark mode styles */
+.jo-exit-dark-mode {
+    --dark-bg: #121212;
+    --dark-card-bg: #1e1e1e;
+    --dark-text: #e0e0e0;
+    --dark-text-secondary: #a0a0a0;
+    --dark-border: #333;
+    --dark-input-bg: #2a2a2a;
+    --dark-hover: #2c2c2c;
+    --dark-shadow: rgba(0, 0, 0, 0.5);
+}
+
+/* Base container */
+.jo-exit-dark-mode .jo-exit-container {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+/* Header */
+.jo-exit-dark-mode .jo-exit-header {
+    box-shadow: 0 2px 8px var(--dark-shadow);
+}
+
+/* Bottom navigation */
+.jo-exit-dark-mode .jo-exit-bottom-nav {
+    background-color: var(--dark-card-bg);
+    border-top-color: var(--dark-border);
+    box-shadow: 0 -2px 8px var(--dark-shadow);
+}
+
+.jo-exit-dark-mode .jo-exit-nav-item {
+    color: var(--dark-text-secondary);
+}
+
+/* Cards and containers */
+.jo-exit-dark-mode .jo-exit-card,
+.jo-exit-dark-mode .jo-exit-leaderboard-item,
+.jo-exit-dark-mode .jo-exit-exited-item,
+.jo-exit-dark-mode .jo-exit-no-cards,
+.jo-exit-dark-mode .jo-exit-account-profile,
+.jo-exit-dark-mode .jo-exit-login-form,
+.jo-exit-dark-mode .jo-exit-register-form,
+.jo-exit-dark-mode .jo-exit-edit-profile-form,
+.jo-exit-dark-mode .jo-exit-account-section,
+.jo-exit-dark-mode .jo-exit-form-group,
+.jo-exit-dark-mode .jo-exit-register-link,
+.jo-exit-dark-mode .jo-exit-login-link,
+.jo-exit-dark-mode .jo-exit-delete-account-section {
+    background-color: var(--dark-card-bg);
+    color: var(--dark-text);
+    box-shadow: 0 4px 15px var(--dark-shadow);
+}
+
+/* Text elements */
+.jo-exit-dark-mode .jo-exit-card-code,
+.jo-exit-dark-mode .jo-exit-card-years,
+.jo-exit-dark-mode .jo-exit-leaderboard-code,
+.jo-exit-dark-mode .jo-exit-leaderboard-years,
+.jo-exit-dark-mode .jo-exit-form-help,
+.jo-exit-dark-mode .jo-exit-or,
+.jo-exit-dark-mode label,
+.jo-exit-dark-mode .jo-exit-account-section p {
+    color: var(--dark-text-secondary);
+}
+
+.jo-exit-dark-mode h2,
+.jo-exit-dark-mode h3,
+.jo-exit-dark-mode .jo-exit-account-info h2,
+.jo-exit-dark-mode .jo-exit-account-section h3 {
+    color: var(--dark-text);
+}
+
+/* Theme toggle */
+.jo-exit-dark-mode .jo-exit-theme-toggle {
+    background-color: var(--dark-card-bg);
+    border: 1px solid var(--dark-border);
+    color: var(--dark-text);
+}
+
+/* Form elements */
+.jo-exit-dark-mode input[type="text"],
+.jo-exit-dark-mode input[type="password"],
+.jo-exit-dark-mode input[type="email"],
+.jo-exit-dark-mode select,
+.jo-exit-dark-mode textarea {
+    background-color: var(--dark-input-bg);
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+}
+
+.jo-exit-dark-mode input[type="text"]:focus,
+.jo-exit-dark-mode input[type="password"]:focus,
+.jo-exit-dark-mode input[type="email"]:focus,
+.jo-exit-dark-mode select:focus,
+.jo-exit-dark-mode textarea:focus {
+    border-color: var(--theme-color);
+    box-shadow: 0 0 0 2px rgba(var(--theme-color-rgb, 255, 71, 87), 0.25);
+}
+
+.jo-exit-dark-mode input:disabled {
+    background-color: #1a1a1a;
+    color: #666;
+    border-color: #444;
+}
+
+/* Exited screen elements */
+.jo-exit-dark-mode .jo-exit-exited-final-score-info,
+.jo-exit-dark-mode .jo-exit-exited-winner,
+.jo-exit-dark-mode .jo-exit-exited-player-score,
+.jo-exit-dark-mode .jo-exit-exited-top-players {
+    background-color: var(--dark-input-bg);
+    border-color: var(--dark-border);
+}
+
+.jo-exit-dark-mode .jo-exit-exited-final-score-label,
+.jo-exit-dark-mode .jo-exit-exited-player-score-label,
+.jo-exit-dark-mode .jo-exit-exited-top-players-label {
+    color: var(--dark-text);
+}
+
+.jo-exit-dark-mode .jo-exit-exited-final-score-desc,
+.jo-exit-dark-mode .jo-exit-exited-top-player-rank {
+    color: var(--dark-text-secondary);
+}
+
+/* Links */
+.jo-exit-dark-mode a {
+    color: var(--theme-color);
+}
+
+.jo-exit-dark-mode a:hover {
+    color: var(--theme-color);
+    opacity: 0.8;
+}
+
+/* Messages */
+.jo-exit-dark-mode .jo-exit-form-message {
+    background-color: var(--dark-input-bg);
+    border-color: var(--dark-border);
+}
+
+.jo-exit-dark-mode .jo-exit-form-message.success {
+    background-color: rgba(40, 167, 69, 0.2);
+    border-color: rgba(40, 167, 69, 0.3);
+    color: #98c379;
+}
+
+.jo-exit-dark-mode .jo-exit-form-message.error {
+    background-color: rgba(220, 53, 69, 0.2);
+    border-color: rgba(220, 53, 69, 0.3);
+    color: #e06c75;
+}
+
+/* Loading spinner */
+.jo-exit-dark-mode .jo-exit-loading {
+    color: var(--dark-text-secondary);
+}
+
+.jo-exit-dark-mode .jo-exit-spinner {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Swipe indicators */
+.jo-exit-dark-mode .jo-exit-swipe-indicator {
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Account avatar */
+.jo-exit-dark-mode .jo-exit-account-avatar,
+.jo-exit-dark-mode .jo-exit-nav-avatar {
+    border: 2px solid var(--dark-border);
+    background-color: var(--dark-input-bg);
+}
+
+/* Voted employees */
+.jo-exit-dark-mode .jo-exit-voted-employee {
+    background-color: var(--dark-input-bg);
+    border-color: var(--dark-border);
+}
+
+.jo-exit-dark-mode .jo-exit-voted-employee-name {
+    color: var(--dark-text);
+}
+
+.jo-exit-dark-mode .jo-exit-voted-employee-date {
+    color: var(--dark-text-secondary);
+}
+
+/* Delete account section */
+.jo-exit-dark-mode .jo-exit-delete-account-section {
+    background-color: rgba(220, 53, 69, 0.15);
+    border-color: rgba(220, 53, 69, 0.3);
+}
+
+.jo-exit-dark-mode .jo-exit-delete-account-section h3 {
+    color: #e06c75;
+}
+
+.jo-exit-dark-mode .jo-exit-delete-account-section p {
+    color: #e06c75;
+    opacity: 0.8;
+}
+
+/* Info screen */
+.jo-exit-dark-mode .jo-exit-info-container {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+.jo-exit-dark-mode .jo-exit-info-container h2 {
+    color: var(--theme-color);
+    border-bottom-color: var(--dark-border);
+}
+
+.jo-exit-dark-mode .jo-exit-info-container h3 {
+    color: var(--theme-color);
+}
+
+.jo-exit-dark-mode .jo-exit-info-container p {
+    color: var(--dark-text);
+}
+
+.jo-exit-dark-mode .jo-exit-info-container strong {
+    color: var(--theme-color);
+}
+
+.jo-exit-dark-mode .jo-exit-info-container ul li,
+.jo-exit-dark-mode .jo-exit-info-container ol li {
+    color: var(--dark-text);
+}
+
+.jo-exit-dark-mode .jo-exit-info-container ul li:before,
+.jo-exit-dark-mode .jo-exit-info-container ol li:before {
+    color: var(--theme-color);
+}
+
+.jo-exit-dark-mode .jo-exit-info-section {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+    border-left-color: var(--theme-color);
+    box-shadow: 0 2px 8px var(--dark-shadow);
+}
+
+/* Global leaderboard */
+.jo-exit-dark-mode .jo-exit-leaderboard-trophy-header {
+    background-color: var(--theme-color);
+    box-shadow: 0 2px 8px var(--dark-shadow);
+}
+
+.jo-exit-dark-mode .jo-exit-leaderboard-trophy-container {
+    background-color: var(--dark-bg);
+}
+
+.jo-exit-dark-mode .jo-exit-leaderboard-trophy-item {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+    box-shadow: 0 2px 8px var(--dark-shadow);
+}
+
+.jo-exit-dark-mode .jo-exit-empty-message {
+    color: var(--dark-text-secondary);
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+}
+
+/* Fix for swipe buttons */
+.jo-exit-dark-mode .jo-exit-swipe-button:not(.jo-exit-like-button):not(.jo-exit-exit-button) {
+    background-color: var(--theme-color);
+    color: white;
+}
+
+.jo-exit-dark-mode .jo-exit-swipe-button:not(.jo-exit-like-button):not(.jo-exit-exit-button):hover {
+    opacity: 0.9;
+}
+
+/* Fix for cooldown required */
+.jo-exit-dark-mode .jo-exit-cooldown-required {
+    background-color: var(--dark-card-bg);
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+    box-shadow: 0 4px 15px var(--dark-shadow);
+}
+
+.jo-exit-dark-mode .jo-exit-cooldown-title {
+    color: var(--theme-color);
+}
+
+.jo-exit-dark-mode .jo-exit-cooldown-message {
+    color: var(--dark-text);
+}
+
+.jo-exit-dark-mode .jo-exit-cooldown-timer {
+    color: var(--theme-color);
+    background-color: transparent;
+    border-color: var(--dark-border);
+}
+
+/* Fix for leaderboard name */
+.jo-exit-dark-mode .jo-exit-leaderboard-name,
+.jo-exit-dark-mode .jo-exit-leaderboard-item .jo-exit-leaderboard-name {
+    color: var(--dark-text);
+    font-weight: bold;
+}
+
+/* Keep leaderboard rank numbers white */
+.jo-exit-dark-mode .jo-exit-leaderboard-rank {
+    color: white !important;
+}
+
+/* Preserve gold, silver, bronze colors */
+.jo-exit-dark-mode .jo-exit-leaderboard-item.gold {
+    background-color: rgba(255, 215, 0, 0.15);
+    border-color: rgba(255, 215, 0, 0.3);
+}
+
+.jo-exit-dark-mode .jo-exit-leaderboard-item.silver {
+    background-color: rgba(192, 192, 192, 0.15);
+    border-color: rgba(192, 192, 192, 0.3);
+}
+
+.jo-exit-dark-mode .jo-exit-leaderboard-item.bronze {
+    background-color: rgba(205, 127, 50, 0.15);
+    border-color: rgba(205, 127, 50, 0.3);
+}
+
+.jo-exit-dark-mode .jo-exit-leaderboard-trophy-position.gold {
+    background-color: #ffd700;
+    color: #000;
+}
+
+.jo-exit-dark-mode .jo-exit-leaderboard-trophy-position.silver {
+    background-color: #c0c0c0;
+    color: #000;
+}
+
+.jo-exit-dark-mode .jo-exit-leaderboard-trophy-position.bronze {
+    background-color: #cd7f32;
+    color: #000;
+}
+
+/* Fix for account exp */
+.jo-exit-dark-mode .jo-exit-account-exp {
+    color: var(--theme-color) !important;
+    font-weight: bold;
+    background-color: transparent !important;
+}
+
+/* Fix for edit profile container */
+.jo-exit-dark-mode .jo-exit-edit-profile-container {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+.jo-exit-dark-mode .jo-exit-edit-profile-container h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--dark-border);
+}
+
+.jo-exit-dark-mode .jo-exit-edit-profile-container label {
+    color: var(--dark-text);
+}
+
+.jo-exit-dark-mode .jo-exit-edit-profile-container .jo-exit-form-help {
+    color: var(--dark-text-secondary);
+}
+
+/* Fix for appearance section in dark mode */
+.jo-exit-dark-mode .jo-exit-appearance-section {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+.jo-exit-dark-mode .jo-exit-appearance-section h3 {
+    color: var(--dark-text);
+    border-bottom-color: var(--dark-border);
+}
+
+.jo-exit-dark-mode .jo-exit-dark-mode-label {
+    color: var(--dark-text);
+}
+
+/* Fix for avatar container */
+.jo-exit-dark-mode .jo-exit-avatar-container {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+/* Fix for form message */
+.jo-exit-dark-mode #jo-exit-edit-profile-message,
+.jo-exit-dark-mode #jo-exit-login-message,
+.jo-exit-dark-mode #jo-exit-register-message {
+    background-color: var(--dark-input-bg);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+/* Fix for account section */
+.jo-exit-dark-mode .jo-exit-account-section {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+    box-shadow: 0 4px 15px var(--dark-shadow);
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.jo-exit-dark-mode .jo-exit-account-section h3 {
+    color: var(--theme-color);
+    border-bottom: 1px solid var(--dark-border);
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+/* Fix for register form */
+.jo-exit-dark-mode .jo-exit-register-form {
+    background-color: var(--dark-card-bg);
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+    box-shadow: 0 4px 15px var(--dark-shadow);
+}
+
+.jo-exit-dark-mode .jo-exit-register-form h2 {
+    color: var(--dark-text);
+}
+
+/* Fix for login required */
+.jo-exit-dark-mode .jo-exit-login-required {
+    background-color: var(--dark-card-bg);
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+    box-shadow: 0 4px 15px var(--dark-shadow);
+}
+
+.jo-exit-dark-mode .jo-exit-login-required-title {
+    color: var(--theme-color);
+}
+
+.jo-exit-dark-mode .jo-exit-login-required-message {
+    color: var(--dark-text);
+}
+
+.jo-exit-dark-mode .jo-exit-login-register-button {
+    background-color: var(--theme-color);
+    color: white;
+    border-color: var(--theme-color);
+}
+
+.jo-exit-dark-mode .jo-exit-login-register-button:hover {
+    opacity: 0.9;
+}
+
+/* Fix for account profile */
+.jo-exit-dark-mode .jo-exit-account-profile {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+    box-shadow: 0 4px 15px var(--dark-shadow);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.jo-exit-dark-mode .jo-exit-account-info h2 {
+    color: var(--dark-text);
+    margin-top: 0;
+}
+
+.jo-exit-dark-mode .jo-exit-account-info p {
+    color: var(--dark-text-secondary);
+}
+
+/* Fix for voted employees */
+.jo-exit-dark-mode .jo-exit-account-voted-employees {
+    background-color: var(--dark-input-bg);
+    border-color: var(--dark-border);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+/* Fix for no cards message */
+.jo-exit-dark-mode .jo-exit-no-cards p {
+    color: var(--dark-text-secondary);
+}
+
+/* Fix for account link */
+.jo-exit-dark-mode .jo-exit-account-link {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding: 10px 0;
+    margin-top: 15px;
+    text-align: center;
+}
+
+

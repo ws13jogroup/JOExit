@@ -1,0 +1,556 @@
+# Copyright (C) 2023 Augment
+# This file is distributed under the same license as the JOb Exit Plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: JOb Exit Plugin 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/job-exit-plugin\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-10-15T12:00:00+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: job-exit-plugin\n"
+
+#. Plugin Name of the plugin
+msgid "JOb Exit Plugin"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://example.com/jo-exit-plugin"
+msgstr ""
+
+#. Description of the plugin
+msgid "A Tinder-style app for employees with swipe functionality"
+msgstr ""
+
+#. Author of the plugin
+msgid "Augment"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://example.com"
+msgstr ""
+
+#: public/class-jo-exit-public.php:90
+msgid "Loading employees..."
+msgstr ""
+
+#: public/class-jo-exit-public.php:91
+msgid "No employees available for voting. Check back later!"
+msgstr ""
+
+#: public/class-jo-exit-public.php:92
+msgid "No valid employees available for voting. Check back later!"
+msgstr ""
+
+#: public/class-jo-exit-public.php:93
+msgid "An error occurred while loading employees."
+msgstr ""
+
+#: public/class-jo-exit-public.php:94
+msgid "Seniority"
+msgstr ""
+
+#: public/class-jo-exit-public.php:95
+msgid "year"
+msgstr ""
+
+#: public/class-jo-exit-public.php:96
+msgid "years"
+msgstr ""
+
+#: public/class-jo-exit-public.php:97
+msgid "N/A"
+msgstr ""
+
+#: public/class-jo-exit-public.php:100
+msgid "It will be a great loss... or maybe not 😅"
+msgstr ""
+
+#: public/class-jo-exit-public.php:101
+msgid "Another talent leaving... towards the exit! 😏"
+msgstr ""
+
+#: public/class-jo-exit-public.php:102
+msgid "Promotion pending... to the door! 🙄"
+msgstr ""
+
+#: public/class-jo-exit-public.php:103
+msgid "Someone prepare the reference letter... very short! 😉"
+msgstr ""
+
+#: public/class-jo-exit-public.php:104
+msgid "Their JOby is already deactivated! 😜"
+msgstr ""
+
+#: public/class-jo-exit-public.php:105
+msgid "Their desk is already free! 🙋"
+msgstr ""
+
+#: public/class-jo-exit-public.php:106
+msgid "Goodbye, we won't miss you... much! 😊"
+msgstr ""
+
+#: public/class-jo-exit-public.php:107
+msgid "This is why you should never get too attached to colleagues! 😂"
+msgstr ""
+
+#: public/class-jo-exit-public.php:108
+msgid "Let's see who will be next... 😈"
+msgstr ""
+
+#: public/class-jo-exit-public.php:109
+msgid "One less problem for the HR office! 😎"
+msgstr ""
+
+#: public/class-jo-exit-public.php:113
+msgid "Saved by a hair... this time! 🙌"
+msgstr ""
+
+#: public/class-jo-exit-public.php:114
+msgid "Survived for another day! 😍"
+msgstr ""
+
+#: public/class-jo-exit-public.php:115
+msgid "Their luck won't last forever... 😝"
+msgstr ""
+
+#: public/class-jo-exit-public.php:116
+msgid "Stays... for now! 😎"
+msgstr ""
+
+#: public/class-jo-exit-public.php:117
+msgid "Today is their lucky day! 😉"
+msgstr ""
+
+#: public/class-jo-exit-public.php:118
+msgid "Escaped firing... for this time! 😁"
+msgstr ""
+
+#: public/class-jo-exit-public.php:119
+msgid "Someone up there is protecting them! 😊"
+msgstr ""
+
+#: public/class-jo-exit-public.php:120
+msgid "Will continue to occupy their desk... for now! 😬"
+msgstr ""
+
+#: public/class-jo-exit-public.php:121
+msgid "Still safe... but we'll keep an eye on them! 🙂"
+msgstr ""
+
+#: public/class-jo-exit-public.php:122
+msgid "Avoided the worst... at least for today! 😏"
+msgstr ""
+
+#: public/partials/job-exit-info.php:10
+msgid "🎮 Welcome to JOb Exit! 🎮"
+msgstr ""
+
+#: public/partials/job-exit-info.php:13
+msgid "🤔 What is JOb Exit?"
+msgstr ""
+
+#: public/partials/job-exit-info.php:14
+msgid "JOb Exit is the most fun office game ever! Imagine Tinder, but instead of looking for your soulmate, you decide which colleagues might soon leave the company (with a touch of irony, of course)!"
+msgstr ""
+
+#: public/partials/job-exit-info.php:15
+msgid "This game was created in a playful spirit and is not meant to be offensive to anyone. It's just a way to lighten up the workday, create a moment of fun, and maybe win the competition for the best \"reverse talent scout\" in the office!"
+msgstr ""
+
+#: public/partials/job-exit-info.php:19
+msgid "🎯 Game Objective"
+msgstr ""
+
+#: public/partials/job-exit-info.php:20
+msgid "The objective is simple: guess which colleagues might soon leave the company. The better you are at predicting who will \"exit\", the more points you'll earn! Become the best \"reverse talent hunter\" and conquer the top of the global leaderboard!"
+msgstr ""
+
+#: public/partials/job-exit-info.php:24
+msgid "🎮 How to Play?"
+msgstr ""
+
+#: public/partials/job-exit-info.php:26
+msgid "Swipe right (or press EXIT)"
+msgstr ""
+
+#: public/partials/job-exit-info.php:26
+msgid "If you think the colleague will soon \"exit\". This adds a point to their exit score and earns you experience points if you guess correctly!"
+msgstr ""
+
+#: public/partials/job-exit-info.php:27
+msgid "Swipe left (or press NOPE)"
+msgstr ""
+
+#: public/partials/job-exit-info.php:27
+msgid "If you think the colleague will stay with the company. This doesn't affect the score."
+msgstr ""
+
+#: public/partials/job-exit-info.php:28
+msgid "Each card shows the colleague's photo, name, company code, and years of service."
+msgstr ""
+
+#: public/partials/job-exit-info.php:29
+msgid "The more exit points you assign to a colleague, the higher your final score will be if they end up in \"exit\"!"
+msgstr ""
+
+#: public/partials/job-exit-info.php:34
+msgid "⏱️ Cooldown System"
+msgstr ""
+
+#: public/partials/job-exit-info.php:35
+msgid "After voting for all available employees, you'll need to wait 8 hours before you can vote again. You'll see a timer showing you how much time is left. Don't worry, time flies when you're having fun!"
+msgstr ""
+
+#: public/partials/job-exit-info.php:39
+msgid "📊 Game Screens"
+msgstr ""
+
+#: public/partials/job-exit-info.php:41
+msgid "Home"
+msgstr ""
+
+#: public/partials/job-exit-info.php:41
+msgid "Here you can vote for your colleagues with swipe. Have fun giving EXIT or NOPE!"
+msgstr ""
+
+#: public/partials/job-exit-info.php:42
+msgid "Exit Points"
+msgstr ""
+
+#: public/partials/job-exit-info.php:42
+msgid "Shows employees sorted by exit score. Who will be the next to leave the company?"
+msgstr ""
+
+#: public/partials/job-exit-info.php:43
+msgid "Exit"
+msgstr ""
+
+#: public/partials/job-exit-info.php:43
+msgid "The hall of fame (or hall of shame?) of colleagues who have reached \"exited\" status. Here you can see when they left and their final score."
+msgstr ""
+
+#: public/partials/job-exit-info.php:44
+msgid "Global Leaderboard"
+msgstr ""
+
+#: public/partials/job-exit-info.php:44
+msgid "The ranking of players who are best at predicting exits! Climb the ranks and become the best reverse talent scout!"
+msgstr ""
+
+#: public/partials/job-exit-info.php:45
+msgid "Account"
+msgstr ""
+
+#: public/partials/job-exit-info.php:45
+msgid "Manage your profile, see your experience points and the employees you've voted for."
+msgstr ""
+
+#: public/partials/job-exit-info.php:50
+msgid "💰 Scoring System"
+msgstr ""
+
+#: public/partials/job-exit-info.php:51
+msgid "In JOb Exit there are two types of scores:"
+msgstr ""
+
+#: public/partials/job-exit-info.php:53
+msgid "Exit Points"
+msgstr ""
+
+#: public/partials/job-exit-info.php:53
+msgid "These are the points you assign to employees when you vote EXIT. The more exit points an employee has, the higher the experience score you'll get."
+msgstr ""
+
+#: public/partials/job-exit-info.php:54
+msgid "Experience Points (EXP)"
+msgstr ""
+
+#: public/partials/job-exit-info.php:54
+msgid "These are your personal points that you earn when an employee you voted for ends up in the Exit screen. The calculation is: employee's years of service + total exit points received * exit points assigned by the user = experience points earned!"
+msgstr ""
+
+#: public/partials/job-exit-info.php:56
+msgid "Your total experience points determine your position in the Global Leaderboard. The more you have, the higher you'll be in the rankings!"
+msgstr ""
+
+#: public/partials/job-exit-info.php:60
+msgid "🎭 Ironic Comments"
+msgstr ""
+
+#: public/partials/job-exit-info.php:61
+msgid "Every time you vote, a random ironic comment will appear. Some are funny, others sarcastic, but all are designed to make you smile! The comments are different depending on whether you voted EXIT or NOPE."
+msgstr ""
+
+#: public/partials/job-exit-info.php:65
+msgid "⚠️ Important Disclaimer"
+msgstr ""
+
+#: public/partials/job-exit-info.php:66
+msgid "JOb Exit is a purely playful game and has no impact on the actual employment situation of employees. Exit predictions are just for fun and do not reflect in any way the real intentions or situations of colleagues."
+msgstr ""
+
+#: public/partials/job-exit-info.php:67
+msgid "Always remember to play with respect and good humor. The goal is to have fun together, not to offend anyone!"
+msgstr ""
+
+#: public/partials/job-exit-info.php:71
+msgid "🚀 Ready to Play?"
+msgstr ""
+
+#: public/partials/job-exit-info.php:72
+msgid "Now that you know all the rules, it's time to go back to the home screen and start voting! Who will be the next to EXIT? It's up to you to decide!"
+msgstr ""
+
+#: public/partials/job-exit-info.php:73
+msgid "Have fun and may the best reverse talent scout win! 🏆"
+msgstr ""
+
+#: admin/partials/jo-exit-admin-settings.php:36
+msgid "Theme Color"
+msgstr ""
+
+#: admin/partials/jo-exit-admin-settings.php:38
+msgid "Select a color for the theme. This will change the main color used throughout the app."
+msgstr ""
+
+#: admin/partials/jo-exit-admin-settings.php:42
+msgid "Save Theme Settings"
+msgstr ""
+
+#: admin/partials/jo-exit-admin-settings.php:43
+msgid "Reset to Default Color"
+msgstr ""
+
+#: admin/partials/jo-exit-admin-settings.php:52
+msgid "Header Logo"
+msgstr ""
+
+#: admin/partials/jo-exit-admin-settings.php:60
+msgid "Upload Logo"
+msgstr ""
+
+#: admin/partials/jo-exit-admin-settings.php:61
+msgid "Reset to Default Logo"
+msgstr ""
+
+#: admin/partials/jo-exit-admin-settings.php:63
+msgid "Upload a custom logo for the header. The logo will be resized to maintain a height of 42px."
+msgstr ""
+
+#: admin/class-jo-exit-admin.php:99
+msgid "Theme color has been reset to default."
+msgstr ""
+
+#: admin/class-jo-exit-admin.php:100
+msgid "Select or Upload Logo"
+msgstr ""
+
+#: admin/class-jo-exit-admin.php:101
+msgid "Use this logo"
+msgstr ""
+
+#: admin/class-jo-exit-admin.php:102
+msgid "Please select an image file."
+msgstr ""
+
+#: admin/class-jo-exit-admin.php:103
+msgid "Logo has been reset to default."
+msgstr ""
+
+#: admin/class-jo-exit-admin.php:458
+msgid "Theme settings saved successfully"
+msgstr ""
+
+#: public/partials/jo-exit-account-content.php:46
+msgid "Appearance"
+msgstr ""
+
+#: public/partials/jo-exit-account-content.php:48
+msgid "Dark Mode"
+msgstr ""
+
+#: public/class-jo-exit-public.php:445
+msgid "You must be logged in to change settings."
+msgstr ""
+
+#: public/class-jo-exit-public.php:226
+msgid "You have reached the maximum number of EXIT votes. New votes will replace the oldest ones."
+msgstr ""
+
+msgid "Edit Vote"
+msgstr ""
+
+msgid "Reset All Votes"
+msgstr ""
+
+msgid "The Fix All User Votes button has been removed because it is no longer needed"
+msgstr ""
+
+msgid "Nope"
+msgstr ""
+
+msgid "JOb Exit - User Votes"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Filter by User:"
+msgstr ""
+
+msgid "All Users"
+msgstr ""
+
+msgid "Filter by Employee:"
+msgstr ""
+
+msgid "All Employees"
+msgstr ""
+
+msgid "Apply Filters"
+msgstr ""
+
+msgid "Reset Filters"
+msgstr ""
+
+msgid "User Votes"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "Employee"
+msgstr ""
+
+msgid "Photo"
+msgstr ""
+
+msgid "Vote Type"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Loading user votes..."
+msgstr ""
+
+msgid "User:"
+msgstr ""
+
+msgid "Employee:"
+msgstr ""
+
+msgid "Vote Type:"
+msgstr ""
+
+msgid "Points:"
+msgstr ""
+
+msgid "Save Changes"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Reset User Votes"
+msgstr ""
+
+msgid "Are you sure you want to reset all votes for this user? This action cannot be undone."
+msgstr ""
+
+msgid "Reset Votes"
+msgstr ""
+
+msgid "To confirm your score, you need to vote for all employees. Keep voting!"
+msgstr ""
+
+msgid "Security check failed."
+msgstr ""
+
+msgid "Username and password are required."
+msgstr ""
+
+msgid "Invalid username or password."
+msgstr ""
+
+msgid "Login successful."
+msgstr ""
+
+msgid "All fields are required."
+msgstr ""
+
+msgid "Username already in use."
+msgstr ""
+
+msgid "Email already in use."
+msgstr ""
+
+msgid "Registration completed successfully."
+msgstr ""
+
+msgid "Logout successful."
+msgstr ""
+
+msgid "You must be logged in to update your profile."
+msgstr ""
+
+msgid "Email is required."
+msgstr ""
+
+msgid "Email already in use by another user."
+msgstr ""
+
+msgid "Profile updated successfully."
+msgstr ""
+
+msgid "You must be logged in to view voting data."
+msgstr ""
+
+msgid "An error occurred while loading voting data."
+msgstr ""
+
+msgid "This method is no longer supported. Use direct upload via base64."
+msgstr ""
+
+msgid "You must be logged in to delete your account."
+msgstr ""
+
+msgid "Administrators cannot delete their account from this interface."
+msgstr ""
+
+msgid "Account deleted successfully."
+msgstr ""
+
+msgid "An error occurred while deleting the account."
+msgstr ""
+
+msgid "You must be logged in to check cooldown."
+msgstr ""
+
+msgid "You must be logged in to set cooldown."
+msgstr ""
+
+msgid "Cooldown set successfully."
+msgstr ""
+
+msgid "Error setting cooldown."
+msgstr ""
+
+msgid "You must be logged in to get vote count."
+msgstr ""
+
+#: public/class-jo-exit-public.php:451
+msgid "Security check failed."
+msgstr ""
+
+#: public/class-jo-exit-public.php:463
+msgid "Dark mode preference saved."
+msgstr ""

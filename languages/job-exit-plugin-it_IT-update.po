@@ -1,0 +1,42 @@
+# Copyright (C) 2023 Augment
+# This file is distributed under the same license as the JOb Exit Plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: JOb Exit Plugin 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/job-exit-plugin\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-10-15T12:00:00+00:00\n"
+"PO-Revision-Date: 2023-10-15T12:00:00+00:00\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: job-exit-plugin\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Nuove stringhe da aggiungere
+msgid "Mark as read"
+msgstr "Segna come letto"
+
+msgid "Loading changelog..."
+msgstr "Caricamento changelog..."
+
+msgid "No Notifications"
+msgstr "Nessuna notifica"
+
+msgid "You have no new notifications."
+msgstr "Non hai nuove notifiche."
+
+msgid "Login Required"
+msgstr "Login richiesto"
+
+msgid "Please login to view notifications."
+msgstr "Effettua il login per visualizzare le notifiche."
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Changelog"
+msgstr "Changelog"
