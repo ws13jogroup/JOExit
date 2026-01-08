@@ -16,14 +16,24 @@
  * @subpackage Jo_Exit/public
  * @author     Your Name <email@example.com>
  */
-class Jo_Exit_User {
+class Jo_Exit_User
+{
+
+    /**
+     * The cooldown period in seconds (8 hours).
+     *
+     * @since    1.0.0
+     */
+    const COOLDOWN_PERIOD = 28800;
+
 
     /**
      * Initialize the class and set its properties.
      *
      * @since    1.0.0
      */
-    public function __construct() {
+    public function __construct()
+    {
         // Register AJAX handlers
         add_action('wp_ajax_jo_exit_logout_user', array($this, 'ajax_logout_user'));
         add_action('wp_ajax_jo_exit_update_profile', array($this, 'ajax_update_profile'));
@@ -33,6 +43,7 @@ class Jo_Exit_User {
         add_action('wp_ajax_jo_exit_set_cooldown', array($this, 'ajax_set_cooldown'));
         add_action('wp_ajax_jo_exit_get_exit_votes_count', array($this, 'ajax_get_exit_votes_count'));
         add_action('wp_ajax_jo_exit_delete_vote', array($this, 'ajax_delete_vote'));
+        add_action('wp_ajax_nopriv_jo_exit_delete_vote', array($this, 'ajax_delete_vote')); // Should we allow this? Implementation plan says restrict voting/management to logged in.
 
         add_action('wp_ajax_nopriv_jo_exit_login_user', array($this, 'ajax_login_user'));
         add_action('wp_ajax_nopriv_jo_exit_register_user', array($this, 'ajax_register_user'));
@@ -43,7 +54,8 @@ class Jo_Exit_User {
      *
      * @since    1.0.0
      */
-    public function ajax_login_user() {
+    public function ajax_login_user()
+    {
         // Check nonce
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce')) {
             wp_send_json_error(array('message' => esc_html__('Security check failed.', 'job-exit-plugin')));
@@ -60,9 +72,9 @@ class Jo_Exit_User {
 
         // Attempt to log in
         $credentials = array(
-            'user_login'    => $username,
+            'user_login' => $username,
             'user_password' => $password,
-            'remember'      => true,
+            'remember' => true,
         );
 
         $user = wp_signon($credentials, false);
@@ -79,7 +91,8 @@ class Jo_Exit_User {
      *
      * @since    1.0.0
      */
-    public function ajax_register_user() {
+    public function ajax_register_user()
+    {
         // Check nonce
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce')) {
             wp_send_json_error(array('message' => esc_html__('Security check failed.', 'job-exit-plugin')));
@@ -141,7 +154,8 @@ class Jo_Exit_User {
      *
      * @since    1.0.0
      */
-    public function ajax_logout_user() {
+    public function ajax_logout_user()
+    {
         // Check nonce
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce')) {
             wp_send_json_error(array('message' => esc_html__('Security check failed.', 'job-exit-plugin')));
@@ -158,7 +172,8 @@ class Jo_Exit_User {
      *
      * @since    1.0.0
      */
-    public function ajax_update_profile() {
+    public function ajax_update_profile()
+    {
         // Check nonce
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce')) {
             wp_send_json_error(array('message' => esc_html__('Security check failed.', 'job-exit-plugin')));
@@ -226,7 +241,8 @@ class Jo_Exit_User {
      *
      * @since    1.0.0
      */
-    public function ajax_get_user_voting_data() {
+    public function ajax_get_user_voting_data()
+    {
         try {
             // Check nonce
             if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce')) {
@@ -296,7 +312,7 @@ class Jo_Exit_User {
             error_log('Jo_Exit: Found ' . count($voted_employees) . ' active voted employees for user ID: ' . $user_id);
 
             // Sort voted employees by points (descending)
-            usort($voted_employees, function($a, $b) {
+            usort($voted_employees, function ($a, $b) {
                 return $b['points'] - $a['points'];
             });
 
@@ -315,7 +331,8 @@ class Jo_Exit_User {
      *
      * @since    1.0.0
      */
-    public function ajax_upload_avatar() {
+    public function ajax_upload_avatar()
+    {
         // This function is no longer used as we're using base64 encoding directly in JavaScript
         wp_send_json_error(array('message' => esc_html__('This method is no longer supported. Use direct upload via base64.', 'job-exit-plugin')));
     }
@@ -325,7 +342,8 @@ class Jo_Exit_User {
      *
      * @since    1.0.0
      */
-    public function ajax_delete_account() {
+    public function ajax_delete_account()
+    {
         // Check nonce
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce')) {
             wp_send_json_error(array('message' => esc_html__('Security check failed.', 'job-exit-plugin')));
@@ -367,7 +385,8 @@ class Jo_Exit_User {
      * @param    int    $user_id    The ID of the user.
      * @return   int                The total experience points.
      */
-    public static function calculate_user_exp($user_id) {
+    public static function calculate_user_exp($user_id)
+    {
         global $wpdb;
         $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
 
@@ -403,48 +422,38 @@ class Jo_Exit_User {
      * @param    int    $user_id    The ID of the user.
      * @return   int                The number of active 'exit' votes.
      */
-    public static function count_exit_votes($user_id) {
+    public static function count_exit_votes($user_id)
+    {
         // Get user votes
         $votes = get_user_meta($user_id, 'jo_exit_votes', true);
 
-        error_log('Jo_Exit_User: Counting exit votes for user ' . $user_id);
-        error_log('Jo_Exit_User: User votes: ' . print_r($votes, true));
-
         if (empty($votes)) {
-            error_log('Jo_Exit_User: No votes found, returning 0');
             return 0;
         }
 
-        // Count only active 'exit' votes
-        $count = 0;
+        // Filter employee IDs that have 'exit' votes with points > 0
+        $employee_ids = array();
         foreach ($votes as $employee_id => $vote_data) {
-            error_log('Jo_Exit_User: Checking vote for employee ' . $employee_id . ': ' . print_r($vote_data, true));
-
             if (isset($vote_data['vote']) && $vote_data['vote'] === 'exit') {
-                // Check if the vote has points > 0
                 $points = isset($vote_data['points']) ? intval($vote_data['points']) : 0;
-
                 if ($points > 0) {
-                    error_log('Jo_Exit_User: Found exit vote with ' . $points . ' points for employee ' . $employee_id);
-
-                    // Get employee data to check if it's still active
-                    $employee = Jo_Exit_DB::get_employee($employee_id);
-                    if ($employee && $employee->status === 'active') {
-                        $count++;
-                        error_log('Jo_Exit_User: Employee ' . $employee_id . ' is active, incrementing count to ' . $count);
-                    } else {
-                        error_log('Jo_Exit_User: Employee ' . $employee_id . ' is not active or not found');
-                    }
-                } else {
-                    error_log('Jo_Exit_User: Skipping exit vote for employee ' . $employee_id . ' because it has 0 points');
+                    $employee_ids[] = intval($employee_id);
                 }
-            } else {
-                error_log('Jo_Exit_User: Not an exit vote for employee ' . $employee_id);
             }
         }
 
-        error_log('Jo_Exit_User: Final exit votes count for user ' . $user_id . ': ' . $count);
-        return $count;
+        if (empty($employee_ids)) {
+            return 0;
+        }
+
+        // Count how many of these employees are still active in a single query
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'jo_exit_employees';
+        $ids_string = implode(',', array_map('intval', $employee_ids));
+
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE id IN ($ids_string) AND status = 'active'");
+
+        return intval($count);
     }
 
     /**
@@ -453,7 +462,8 @@ class Jo_Exit_User {
      * @since    1.0.0
      * @return   int    The maximum number of allowed 'exit' votes.
      */
-    public static function get_max_exit_votes() {
+    public static function get_max_exit_votes()
+    {
         return 5; // Maximum 5 'exit' votes allowed
     }
 
@@ -465,7 +475,8 @@ class Jo_Exit_User {
      * @param    string $vote_type      The type of vote ('exit' or 'nope').
      * @return   array                  Result array with 'success' (bool) and 'message' (string).
      */
-    public static function store_user_vote($employee_id, $vote_type) {
+    public static function store_user_vote($employee_id, $vote_type)
+    {
         // Check if user is logged in
         if (!is_user_logged_in()) {
             return array('success' => false, 'message' => 'User not logged in');
@@ -504,18 +515,29 @@ class Jo_Exit_User {
                 $oldest_timestamp = PHP_INT_MAX;
                 $oldest_employee_id = null;
 
+                // Collect IDs to check status in one query
+                $exit_vote_employee_ids = array();
                 foreach ($votes as $emp_id => $vote_data) {
                     if (isset($vote_data['vote']) && $vote_data['vote'] === 'exit' && isset($vote_data['timestamp'])) {
-                        // Skip the current employee if it's already in the list
-                        if ($emp_id == $employee_id) {
-                            continue;
+                        if ($emp_id != $employee_id) {
+                            $exit_vote_employee_ids[] = intval($emp_id);
                         }
+                    }
+                }
 
-                        // Get employee data to check if it's still active
-                        $employee = Jo_Exit_DB::get_employee($emp_id);
-                        if ($employee && $employee->status === 'active' && $vote_data['timestamp'] < $oldest_timestamp) {
-                            $oldest_timestamp = $vote_data['timestamp'];
-                            $oldest_employee_id = $emp_id;
+                if (!empty($exit_vote_employee_ids)) {
+                    global $wpdb;
+                    $table_name = $wpdb->prefix . 'jo_exit_employees';
+                    $ids_string = implode(',', $exit_vote_employee_ids);
+                    $active_employee_ids = $wpdb->get_col("SELECT id FROM $table_name WHERE id IN ($ids_string) AND status = 'active'");
+                    $active_employee_ids = array_map('intval', $active_employee_ids);
+
+                    foreach ($votes as $emp_id => $vote_data) {
+                        if (in_array(intval($emp_id), $active_employee_ids)) {
+                            if ($vote_data['timestamp'] < $oldest_timestamp) {
+                                $oldest_timestamp = $vote_data['timestamp'];
+                                $oldest_employee_id = $emp_id;
+                            }
                         }
                     }
                 }
@@ -633,7 +655,8 @@ class Jo_Exit_User {
      * @param    int    $user_id    The ID of the user.
      * @return   bool               True on success, false on failure.
      */
-    public static function set_last_vote_timestamp($user_id) {
+    public static function set_last_vote_timestamp($user_id)
+    {
         // Set the current timestamp
         $timestamp = time();
         error_log('Jo_Exit_User: Setting last vote timestamp for user ' . $user_id . ' to ' . $timestamp);
@@ -652,7 +675,8 @@ class Jo_Exit_User {
      * @param    int    $user_id    The ID of the user.
      * @return   int                The timestamp of the last vote, or 0 if not set.
      */
-    public static function get_last_vote_timestamp($user_id) {
+    public static function get_last_vote_timestamp($user_id)
+    {
         // Get the timestamp from user meta
         $timestamp = get_user_meta($user_id, 'jo_exit_last_vote_timestamp', true);
         error_log('Jo_Exit_User: Getting last vote timestamp for user ' . $user_id . ': ' . ($timestamp ? $timestamp : 'not set'));
@@ -668,7 +692,8 @@ class Jo_Exit_User {
      * @param    int    $user_id    The ID of the user.
      * @return   array              Array with 'in_cooldown' (bool) and 'remaining_time' (int) in seconds.
      */
-    public static function check_cooldown($user_id) {
+    public static function check_cooldown($user_id)
+    {
         // Get the last vote timestamp
         $last_vote_timestamp = self::get_last_vote_timestamp($user_id);
         error_log('Jo_Exit_User: Last vote timestamp for user ' . $user_id . ': ' . $last_vote_timestamp);
@@ -687,8 +712,8 @@ class Jo_Exit_User {
         $time_elapsed = $now - $last_vote_timestamp;
         error_log('Jo_Exit_User: Current time: ' . $now . ', time elapsed: ' . $time_elapsed . ' seconds');
 
-        // Cooldown period is 8 hours (28800 seconds)
-        $cooldown_period = 28800; // 8 hours = 8 * 60 * 60 = 28800 seconds
+        // Cooldown period
+        $cooldown_period = self::COOLDOWN_PERIOD;
         error_log('Jo_Exit_User: Cooldown period: ' . $cooldown_period . ' seconds');
 
         // Check if user is still in cooldown
@@ -717,7 +742,8 @@ class Jo_Exit_User {
      *
      * @since    1.0.0
      */
-    public function ajax_check_cooldown() {
+    public function ajax_check_cooldown()
+    {
         // Check if user is logged in
         if (!is_user_logged_in()) {
             error_log('Jo_Exit_User: User not logged in, cannot check cooldown');
@@ -753,7 +779,8 @@ class Jo_Exit_User {
      * @param    int    $seconds    Time in seconds.
      * @return   string             Formatted time string.
      */
-    public static function format_time($seconds) {
+    public static function format_time($seconds)
+    {
         $hours = floor($seconds / 3600);
         $minutes = floor(($seconds % 3600) / 60);
         $remaining_seconds = $seconds % 60;
@@ -772,7 +799,8 @@ class Jo_Exit_User {
      *
      * @since    1.0.0
      */
-    public function ajax_set_cooldown() {
+    public function ajax_set_cooldown()
+    {
         // Check if user is logged in
         if (!is_user_logged_in()) {
             wp_send_json_error(array('message' => esc_html__('You must be logged in to set cooldown.', 'job-exit-plugin')));
@@ -809,7 +837,8 @@ class Jo_Exit_User {
      * @since    1.0.0
      * @return   array    Array of users with cooldown status.
      */
-    public static function get_users_cooldown_status() {
+    public static function get_users_cooldown_status()
+    {
         // Get all users
         $users = get_users(array(
             'fields' => array('ID', 'user_login', 'display_name')
@@ -843,7 +872,8 @@ class Jo_Exit_User {
      * @param    int    $user_id    The ID of the user.
      * @return   bool               True on success, false on failure.
      */
-    public static function reset_cooldown($user_id) {
+    public static function reset_cooldown($user_id)
+    {
         // Delete the last vote timestamp
         return delete_user_meta($user_id, 'jo_exit_last_vote_timestamp');
     }
@@ -854,7 +884,8 @@ class Jo_Exit_User {
      * @since    1.0.0
      * @return   int    Number of users affected.
      */
-    public static function reset_all_cooldowns() {
+    public static function reset_all_cooldowns()
+    {
         global $wpdb;
 
         // Delete all last vote timestamps
@@ -873,7 +904,8 @@ class Jo_Exit_User {
      * @param    int    $user_id    The ID of the user.
      * @return   int                The number of votes in the current session.
      */
-    public static function get_session_votes($user_id) {
+    public static function get_session_votes($user_id)
+    {
         // Get session votes from user meta
         $session_votes = get_user_meta($user_id, 'jo_exit_session_votes', true);
 
@@ -890,7 +922,8 @@ class Jo_Exit_User {
      * @param    int    $user_id    The ID of the user.
      * @return   int                The new session votes count.
      */
-    public static function increment_session_votes($user_id) {
+    public static function increment_session_votes($user_id)
+    {
         // Get current session votes
         $session_votes = self::get_session_votes($user_id);
 
@@ -912,7 +945,8 @@ class Jo_Exit_User {
      * @param    int    $user_id    The ID of the user.
      * @return   bool               True on success, false on failure.
      */
-    public static function reset_session_votes($user_id) {
+    public static function reset_session_votes($user_id)
+    {
         // Delete the session votes count
         $result = delete_user_meta($user_id, 'jo_exit_session_votes');
 
@@ -926,7 +960,8 @@ class Jo_Exit_User {
      *
      * @since    1.0.0
      */
-    public function ajax_delete_vote() {
+    public function ajax_delete_vote()
+    {
         // Check nonce
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce')) {
             wp_send_json_error(array('message' => __('Security check failed.', 'jo-exit')));
@@ -1031,7 +1066,8 @@ class Jo_Exit_User {
      *
      * @since    1.0.0
      */
-    public function ajax_get_exit_votes_count() {
+    public function ajax_get_exit_votes_count()
+    {
         // Check nonce
         if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce')) {
             wp_send_json_error(array('message' => esc_html__('Security check failed.', 'job-exit-plugin')));
@@ -1073,7 +1109,8 @@ class Jo_Exit_User {
      * @param    int    $user_id    The ID of the user.
      * @return   bool               True if votes were fixed, false otherwise.
      */
-    public static function fix_user_votes($user_id) {
+    public static function fix_user_votes($user_id)
+    {
         // Get user votes
         $votes = get_user_meta($user_id, 'jo_exit_votes', true);
 
@@ -1148,7 +1185,8 @@ class Jo_Exit_User {
      * @since    1.0.0
      * @return   int    Number of users whose votes were fixed.
      */
-    public static function fix_all_user_votes() {
+    public static function fix_all_user_votes()
+    {
         // Get all users
         $users = get_users(array(
             'fields' => array('ID')

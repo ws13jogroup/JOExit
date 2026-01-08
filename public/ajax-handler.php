@@ -31,8 +31,15 @@ header('Content-Type: application/json');
 // Get the action
 $action = isset($_POST['action']) ? sanitize_text_field($_POST['action']) : '';
 
-// Disabilitiamo completamente la verifica del nonce per tutte le richieste AJAX
-// Questo è necessario per far funzionare la schermata exit
+// Check nonce for security
+$nonce = isset($_POST['nonce']) ? sanitize_text_field($_POST['nonce']) : '';
+if (!wp_verify_nonce($nonce, 'jo_exit_public_nonce')) {
+    echo json_encode(array(
+        'success' => false,
+        'data' => 'Security check failed',
+    ));
+    exit;
+}
 
 // Handle the action
 switch ($action) {
@@ -160,8 +167,10 @@ switch ($action) {
                         $user_votes = get_user_meta($current_user_id, 'jo_exit_votes', true);
                         $user_exit_points = 0;
 
-                        if (is_array($user_votes) && isset($user_votes[$employee->id]) &&
-                            isset($user_votes[$employee->id]['points'])) {
+                        if (
+                            is_array($user_votes) && isset($user_votes[$employee->id]) &&
+                            isset($user_votes[$employee->id]['points'])
+                        ) {
                             $user_exit_points = intval($user_votes[$employee->id]['points']);
                         }
 
@@ -260,6 +269,15 @@ switch ($action) {
             exit;
         }
 
+        // Restrict exit votes to logged in users
+        if ($vote_type === 'exit' && !is_user_logged_in()) {
+            echo json_encode(array(
+                'success' => false,
+                'data' => 'You must be logged in to cast an exit vote.',
+            ));
+            exit;
+        }
+
         // Get user identifier (IP address or user ID if logged in)
         $user_identifier = is_user_logged_in() ? get_current_user_id() : $_SERVER['REMOTE_ADDR'];
 
@@ -272,27 +290,36 @@ switch ($action) {
         // Record vote using the DB class
         $result = Jo_Exit_DB::record_vote($employee_id, $user_identifier, $vote_type);
 
-        if (!$result) {
+        // Store vote in user meta if user is logged in
+        $cooldown_set = false;
+        if (is_user_logged_in()) {
+            if (!class_exists('Jo_Exit_User')) {
+                require_once dirname(__FILE__) . '/class-jo-exit-user.php';
+            }
+
+            // Store the vote
+            $store_result = Jo_Exit_User::store_user_vote($employee_id, $vote_type);
+
+            // Check if cooldown was set in the result
+            if (isset($store_result['cooldown']) && $store_result['cooldown']) {
+                $cooldown_set = true;
+            }
+        }
+
+        if ($result) {
+            echo json_encode(array(
+                'success' => true,
+                'data' => array(
+                    'message' => 'Vote recorded successfully',
+                    'cooldown' => $cooldown_set,
+                ),
+            ));
+        } else {
             echo json_encode(array(
                 'success' => false,
                 'data' => 'Failed to record vote',
             ));
-            exit;
         }
-
-        // Non chiamiamo più store_user_vote qui perché viene già chiamato in Jo_Exit_DB::record_vote
-        // Questo evita il doppio conteggio dei punti
-        // Non aggiorniamo nemmeno il timestamp dell'ultimo voto qui, perché questo causerebbe
-        // l'attivazione del cooldown dopo un solo voto
-        // Il timestamp dell'ultimo voto deve essere aggiornato solo quando l'utente ha votato tutti i dipendenti
-        // o quando ha raggiunto il limite massimo di voti exit
-
-        echo json_encode(array(
-            'success' => true,
-            'data' => array(
-                'message' => 'Vote recorded successfully',
-            ),
-        ));
         break;
 
     case 'jo_exit_load_info':

@@ -4,7 +4,8 @@
  *
  * @since      1.0.0
  */
-class Jo_Exit_Public {
+class Jo_Exit_Public
+{
 
     /**
      * The ID of this plugin.
@@ -31,7 +32,8 @@ class Jo_Exit_Public {
      * @param      string    $plugin_name       The name of the plugin.
      * @param      string    $version    The version of this plugin.
      */
-    public function __construct($plugin_name, $version) {
+    public function __construct($plugin_name, $version)
+    {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
 
@@ -46,10 +48,11 @@ class Jo_Exit_Public {
      * @param    string    $hex    Hex color code
      * @return   string           RGB color values
      */
-    private function hex2rgb($hex) {
+    private function hex2rgb($hex)
+    {
         $hex = str_replace('#', '', $hex);
 
-        if(strlen($hex) == 3) {
+        if (strlen($hex) == 3) {
             $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
             $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
             $b = hexdec(substr($hex, 2, 1) . substr($hex, 2, 1));
@@ -67,7 +70,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function enqueue_styles() {
+    public function enqueue_styles()
+    {
         wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/jo-exit-public.css', array(), $this->version, 'all');
         wp_enqueue_style($this->plugin_name . '-in-team', plugin_dir_url(__FILE__) . 'css/jo-exit-in-team.css', array(), $this->version, 'all');
         wp_enqueue_style($this->plugin_name . '-card-counter', plugin_dir_url(__FILE__) . 'css/jo-exit-card-counter.css', array(), $this->version, 'all');
@@ -153,7 +157,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function enqueue_scripts() {
+    public function enqueue_scripts()
+    {
         // Add Hammer.js for touch/drag handling
         wp_enqueue_script('hammerjs', 'https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js', array(), '2.0.8', true);
 
@@ -293,7 +298,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function register_shortcodes() {
+    public function register_shortcodes()
+    {
         add_shortcode('job_exit_app', array($this, 'render_app'));
         add_shortcode('job_exit_home', array($this, 'render_home'));
         add_shortcode('job_exit_leaderboard', array($this, 'render_leaderboard'));
@@ -321,7 +327,8 @@ class Jo_Exit_Public {
      * @param    array    $atts    Shortcode attributes
      * @return   string            HTML output
      */
-    public function render_app($atts) {
+    public function render_app($atts)
+    {
         // Extract shortcode attributes
         $atts = shortcode_atts(array(
             'theme_color' => '#ff4757',
@@ -339,7 +346,8 @@ class Jo_Exit_Public {
      * @param    array    $atts    Shortcode attributes
      * @return   string            HTML output
      */
-    public function render_home($atts) {
+    public function render_home($atts)
+    {
         // Extract shortcode attributes
         $atts = shortcode_atts(array(
             'theme_color' => '#ff4757',
@@ -357,7 +365,8 @@ class Jo_Exit_Public {
      * @param    array    $atts    Shortcode attributes
      * @return   string            HTML output
      */
-    public function render_leaderboard($atts) {
+    public function render_leaderboard($atts)
+    {
         // Extract shortcode attributes
         $atts = shortcode_atts(array(
             'theme_color' => '#ff4757',
@@ -375,7 +384,8 @@ class Jo_Exit_Public {
      * @param    array    $atts    Shortcode attributes
      * @return   string            HTML output
      */
-    public function render_exited($atts) {
+    public function render_exited($atts)
+    {
         // Extract shortcode attributes
         $atts = shortcode_atts(array(
             'theme_color' => '#ff4757',
@@ -391,7 +401,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_get_employees() {
+    public function ajax_get_employees()
+    {
         // Debug: Log the nonce
         error_log('Received nonce: ' . (isset($_POST['nonce']) ? $_POST['nonce'] : 'not set'));
         error_log('Expected nonce for jo_exit_public_nonce: ' . wp_create_nonce('jo_exit_public_nonce'));
@@ -425,7 +436,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_get_leaderboard() {
+    public function ajax_get_leaderboard()
+    {
         // Disabilitiamo temporaneamente la verifica del nonce per debug
         /*
         if (isset($_POST['nonce'])) {
@@ -450,7 +462,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_toggle_dark_mode() {
+    public function ajax_toggle_dark_mode()
+    {
         // Check if user is logged in
         if (!is_user_logged_in()) {
             wp_send_json_error(esc_html__('You must be logged in to change settings.', 'job-exit-plugin'));
@@ -480,7 +493,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_get_exited() {
+    public function ajax_get_exited()
+    {
         try {
             // Disabilitiamo temporaneamente la verifica del nonce per debug
             // Questo permetterà di far funzionare la schermata exit
@@ -562,18 +576,14 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_vote() {
-        // Disabilitiamo temporaneamente la verifica del nonce per debug
-        /*
-        if (isset($_POST['nonce'])) {
-            $nonce_verified = wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce');
-            if (!$nonce_verified) {
-                error_log('Jo_Exit: Nonce verification failed in ajax_vote');
-                wp_send_json_error(esc_html__('Security check failed', 'job-exit-plugin'));
-                return;
-            }
+    public function ajax_vote()
+    {
+        // Check nonce
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce')) {
+            error_log('Jo_Exit: Nonce verification failed in ajax_vote');
+            wp_send_json_error(esc_html__('Security check failed', 'job-exit-plugin'));
+            return;
         }
-        */
 
         // Validate input
         $employee_id = isset($_POST['employee_id']) ? intval($_POST['employee_id']) : 0;
@@ -582,6 +592,12 @@ class Jo_Exit_Public {
 
         if ($employee_id <= 0 || !in_array($vote_type, array('exit', 'nope'))) {
             wp_send_json_error(esc_html__('Invalid input', 'job-exit-plugin'));
+        }
+
+        // Restrict exit votes to logged in users
+        if ($vote_type === 'exit' && !is_user_logged_in()) {
+            wp_send_json_error(esc_html__('You must be logged in to cast an exit vote.', 'job-exit-plugin'));
+            return;
         }
 
         // Get user identifier (IP address or user ID if logged in)
@@ -644,7 +660,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_load_info() {
+    public function ajax_load_info()
+    {
         // Disabilitiamo temporaneamente la verifica del nonce per debug
         /*
         if (isset($_POST['nonce'])) {
@@ -671,7 +688,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_load_account() {
+    public function ajax_load_account()
+    {
         try {
             // Disabilitiamo temporaneamente la verifica del nonce per debug
             /*
@@ -716,7 +734,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_load_register() {
+    public function ajax_load_register()
+    {
         // Disabilitiamo temporaneamente la verifica del nonce per debug
         /*
         if (isset($_POST['nonce'])) {
@@ -743,7 +762,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_load_edit_profile() {
+    public function ajax_load_edit_profile()
+    {
         // Disabilitiamo temporaneamente la verifica del nonce per debug
         /*
         if (isset($_POST['nonce'])) {
@@ -770,7 +790,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_get_player_leaderboard() {
+    public function ajax_get_player_leaderboard()
+    {
         // Enable error logging
         error_log('Jo_Exit: ajax_get_player_leaderboard called');
 
@@ -829,7 +850,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_get_user_leaderboard() {
+    public function ajax_get_user_leaderboard()
+    {
         // Enable error logging
         error_log('Jo_Exit: ajax_get_user_leaderboard called');
         error_log('Jo_Exit: POST data: ' . print_r($_POST, true));
@@ -905,7 +927,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_get_exit_votes_count() {
+    public function ajax_get_exit_votes_count()
+    {
         // Verify nonce
         if (isset($_POST['nonce'])) {
             $nonce_verified = wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce');
@@ -945,7 +968,8 @@ class Jo_Exit_Public {
      * @param    array    $atts    Shortcode attributes
      * @return   string            HTML output
      */
-    public function render_account($atts) {
+    public function render_account($atts)
+    {
         // Extract shortcode attributes
         $atts = shortcode_atts(array(
             'theme_color' => '#ff4757',
@@ -963,7 +987,8 @@ class Jo_Exit_Public {
      * @param    array    $atts    Shortcode attributes
      * @return   string            HTML output
      */
-    public function render_register($atts) {
+    public function render_register($atts)
+    {
         // Extract shortcode attributes
         $atts = shortcode_atts(array(
             'theme_color' => '#ff4757',
@@ -981,7 +1006,8 @@ class Jo_Exit_Public {
      * @param    array    $atts    Shortcode attributes
      * @return   string            HTML output
      */
-    public function render_edit_profile($atts) {
+    public function render_edit_profile($atts)
+    {
         // Extract shortcode attributes
         $atts = shortcode_atts(array(
             'theme_color' => '#ff4757',
@@ -999,7 +1025,8 @@ class Jo_Exit_Public {
      * @param    array    $atts    Shortcode attributes
      * @return   string            HTML output
      */
-    public function render_global_leaderboard($atts) {
+    public function render_global_leaderboard($atts)
+    {
         // Extract shortcode attributes
         $atts = shortcode_atts(array(
             'theme_color' => '#ff4757',
@@ -1015,7 +1042,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_get_unread_notifications() {
+    public function ajax_get_unread_notifications()
+    {
         // Check if user is logged in
         if (!is_user_logged_in()) {
             wp_send_json_error(array('message' => esc_html__('You must be logged in to view notifications.', 'job-exit-plugin')));
@@ -1036,7 +1064,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_mark_notification_read() {
+    public function ajax_mark_notification_read()
+    {
         // Check if user is logged in
         if (!is_user_logged_in()) {
             wp_send_json_error(array('message' => esc_html__('You must be logged in to mark notifications as read.', 'job-exit-plugin')));
@@ -1068,7 +1097,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_get_notification_content() {
+    public function ajax_get_notification_content()
+    {
         // Check if user is logged in
         if (!is_user_logged_in()) {
             wp_send_json_error(array('message' => esc_html__('You must be logged in to view notification content.', 'job-exit-plugin')));
@@ -1093,7 +1123,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_get_unread_count() {
+    public function ajax_get_unread_count()
+    {
         // Check if user is logged in
         if (!is_user_logged_in()) {
             wp_send_json_error(array('message' => esc_html__('You must be logged in to get unread count.', 'job-exit-plugin')));
@@ -1113,7 +1144,8 @@ class Jo_Exit_Public {
      *
      * @since    1.0.0
      */
-    public function ajax_load_changelog() {
+    public function ajax_load_changelog()
+    {
         ob_start();
         include_once 'partials/jo-exit-changelog-content.php';
         $content = ob_get_clean();

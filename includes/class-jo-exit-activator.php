@@ -4,14 +4,16 @@
  *
  * @since      1.0.0
  */
-class Jo_Exit_Activator {
+class Jo_Exit_Activator
+{
 
     /**
      * Create the necessary database tables on plugin activation.
      *
      * @since    1.0.0
      */
-    public static function activate() {
+    public static function activate()
+    {
         global $wpdb;
         $charset_collate = $wpdb->get_charset_collate();
 
@@ -46,14 +48,14 @@ class Jo_Exit_Activator {
             KEY user_identifier (user_identifier)
         ) $charset_collate;";
 
-        // Table for player scores
         $table_name_player_scores = $wpdb->prefix . 'jo_exit_player_scores';
         $sql_player_scores = "CREATE TABLE $table_name_player_scores (
-            id mediumint(9) NOT NULL AUTO_INCREMENT,
-            user_id mediumint(9) NOT NULL,
-            employee_id mediumint(9) NOT NULL,
+            id bigint(20) NOT NULL AUTO_INCREMENT,
+            user_id bigint(20) UNSIGNED NOT NULL,
+            employee_id bigint(20) NOT NULL,
             player_points int(11) NOT NULL DEFAULT 0,
             created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
             PRIMARY KEY  (id),
             UNIQUE KEY user_employee (user_id, employee_id),
             KEY employee_id (employee_id),
@@ -71,12 +73,11 @@ class Jo_Exit_Activator {
             PRIMARY KEY  (id)
         ) $charset_collate;";
 
-        // Table for notification reads
         $table_name_notification_reads = $wpdb->prefix . 'jo_exit_notification_reads';
         $sql_notification_reads = "CREATE TABLE $table_name_notification_reads (
-            id mediumint(9) NOT NULL AUTO_INCREMENT,
-            notification_id mediumint(9) NOT NULL,
-            user_id mediumint(9) NOT NULL,
+            id bigint(20) NOT NULL AUTO_INCREMENT,
+            notification_id bigint(20) NOT NULL,
+            user_id bigint(20) UNSIGNED NOT NULL,
             read_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
             PRIMARY KEY  (id),
             UNIQUE KEY notification_user (notification_id, user_id),
@@ -125,7 +126,8 @@ class Jo_Exit_Activator {
      *
      * @since    1.0.0
      */
-    public static function update_database_structure() {
+    public static function update_database_structure()
+    {
         global $wpdb;
         $table_name = $wpdb->prefix . 'jo_exit_employees';
         $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
@@ -241,9 +243,9 @@ class Jo_Exit_Activator {
             error_log('Notification reads table does not exist, creating it');
             $charset_collate = $wpdb->get_charset_collate();
             $sql_notification_reads = "CREATE TABLE $notification_reads_table (
-                id mediumint(9) NOT NULL AUTO_INCREMENT,
-                notification_id mediumint(9) NOT NULL,
-                user_id mediumint(9) NOT NULL,
+                id bigint(20) NOT NULL AUTO_INCREMENT,
+                notification_id bigint(20) NOT NULL,
+                user_id bigint(20) UNSIGNED NOT NULL,
                 read_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
                 PRIMARY KEY  (id),
                 UNIQUE KEY notification_user (notification_id, user_id),

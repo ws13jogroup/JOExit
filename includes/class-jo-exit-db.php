@@ -4,7 +4,8 @@
  *
  * @since      1.0.0
  */
-class Jo_Exit_DB {
+class Jo_Exit_DB
+{
 
     /**
      * Get all active employees
@@ -12,7 +13,8 @@ class Jo_Exit_DB {
      * @since    1.0.0
      * @return   array    Array of employee objects
      */
-    public static function get_active_employees() {
+    public static function get_active_employees()
+    {
         global $wpdb;
         $table_name = $wpdb->prefix . 'jo_exit_employees';
 
@@ -26,7 +28,8 @@ class Jo_Exit_DB {
      * @since    1.0.0
      * @return   array    Array of employee objects
      */
-    public static function get_exited_employees() {
+    public static function get_exited_employees()
+    {
         global $wpdb;
         $table_name = $wpdb->prefix . 'jo_exit_employees';
 
@@ -74,7 +77,8 @@ class Jo_Exit_DB {
      * @since    1.0.0
      * @return   array    Array of employee objects
      */
-    public static function get_leaderboard() {
+    public static function get_leaderboard()
+    {
         global $wpdb;
         $table_name = $wpdb->prefix . 'jo_exit_employees';
 
@@ -89,7 +93,8 @@ class Jo_Exit_DB {
      * @param    int      $id    Employee ID
      * @return   object   Employee object
      */
-    public static function get_employee($id) {
+    public static function get_employee($id)
+    {
         global $wpdb;
         $table_name = $wpdb->prefix . 'jo_exit_employees';
 
@@ -104,7 +109,8 @@ class Jo_Exit_DB {
      * @param    array    $data    Employee data
      * @return   int|false         Employee ID or false on failure
      */
-    public static function save_employee($data) {
+    public static function save_employee($data)
+    {
         global $wpdb;
         $table_name = $wpdb->prefix . 'jo_exit_employees';
 
@@ -194,7 +200,8 @@ class Jo_Exit_DB {
      * @param    string   $exit_date       Exit date (YYYY-MM-DD format)
      * @return   bool                      True on success, false on failure
      */
-    public static function mark_exit($id, $exit_date) {
+    public static function mark_exit($id, $exit_date)
+    {
         global $wpdb;
         $table_name = $wpdb->prefix . 'jo_exit_employees';
         $votes_table = $wpdb->prefix . 'jo_exit_votes';
@@ -414,7 +421,8 @@ class Jo_Exit_DB {
      * @param    string   $vote_type        Vote type ('exit' or 'nope')
      * @return   bool                       True on success, false on failure
      */
-    public static function record_vote($employee_id, $user_identifier, $vote_type) {
+    public static function record_vote($employee_id, $user_identifier, $vote_type)
+    {
         global $wpdb;
         $votes_table = $wpdb->prefix . 'jo_exit_votes';
         $employees_table = $wpdb->prefix . 'jo_exit_employees';
@@ -429,37 +437,7 @@ class Jo_Exit_DB {
             $user_id = intval($user_identifier);
         }
 
-        // If this is a logged-in user and an 'exit' vote, check the vote limit
-        if ($user_id > 0 && $vote_type === 'exit') {
-            // Check if this is a new 'exit' vote
-            $is_new_exit_vote = true;
-            $most_recent_vote = $wpdb->get_row(
-                $wpdb->prepare(
-                    "SELECT id, vote_type FROM $votes_table WHERE employee_id = %d AND user_identifier = %s ORDER BY id DESC LIMIT 1",
-                    $employee_id,
-                    $user_identifier
-                )
-            );
 
-            if ($most_recent_vote && $most_recent_vote->vote_type === 'exit') {
-                $is_new_exit_vote = false;
-            }
-
-            if ($is_new_exit_vote) {
-                // Use the Jo_Exit_User class to handle vote limits and FIFO logic
-                $result = Jo_Exit_User::store_user_vote($employee_id, $vote_type);
-
-                if (!$result['success']) {
-                    error_log('Failed to store user vote: ' . $result['message']);
-                    return false;
-                }
-
-                // If cooldown was set, we've reached the limit and the oldest vote was removed
-                if (isset($result['cooldown']) && $result['cooldown']) {
-                    error_log('User has reached the maximum number of exit votes, cooldown set');
-                }
-            }
-        }
 
         // Start transaction
         $wpdb->query('START TRANSACTION');
@@ -554,18 +532,6 @@ class Jo_Exit_DB {
                     $wpdb->query('ROLLBACK');
                     return false;
                 }
-
-                // Aggiorna anche i meta dati dell'utente per azzerare i punti
-                if ($user_id > 0) {
-                    // Azzera i punti nei meta dati dell'utente
-                    $user_votes[$employee_id] = array(
-                        'vote' => 'nope',
-                        'points' => 0,
-                        'timestamp' => time()
-                    );
-                    update_user_meta($user_id, 'jo_exit_votes', $user_votes);
-                    error_log('Updated user meta data: employee ID ' . $employee_id . ' vote changed to nope, points reset to 0');
-                }
             } else if ($previous_vote_type === 'nope' && $vote_type === 'exit') {
                 // Changed from nope to exit - add a point
                 error_log('Changing from nope to exit, adding 1 point');
@@ -605,21 +571,6 @@ class Jo_Exit_DB {
                     error_log('Failed to update score: ' . $wpdb->last_error);
                     $wpdb->query('ROLLBACK');
                     return false;
-                }
-
-                // Aggiorna anche i meta dati dell'utente per incrementare i punti
-                if ($user_id > 0) {
-                    // Incrementa i punti nei meta dati dell'utente
-                    $existing_points = isset($user_votes[$employee_id]['points']) ? intval($user_votes[$employee_id]['points']) : 0;
-                    $new_points = $existing_points + 1;
-                    $user_votes[$employee_id] = array(
-                        'vote' => 'exit',
-                        'points' => $new_points,
-                        'timestamp' => time(),
-                        'incremented' => true // Aggiungi un flag per indicare che è stato incrementato manualmente
-                    );
-                    update_user_meta($user_id, 'jo_exit_votes', $user_votes);
-                    error_log('Updated user meta data: employee ID ' . $employee_id . ' points incremented from ' . $existing_points . ' to ' . $new_points);
                 }
             }
         } else {
@@ -684,7 +635,8 @@ class Jo_Exit_DB {
      * @param    string   $user_identifier  User identifier (IP or user ID)
      * @return   bool                       True if voted, false if not
      */
-    public static function has_voted($employee_id, $user_identifier) {
+    public static function has_voted($employee_id, $user_identifier)
+    {
         global $wpdb;
         $votes_table = $wpdb->prefix . 'jo_exit_votes';
 
@@ -707,7 +659,8 @@ class Jo_Exit_DB {
      * @param    string   $user_identifier  User identifier (user ID)
      * @return   bool                       True on success, false on failure
      */
-    public static function remove_vote($employee_id, $user_identifier) {
+    public static function remove_vote($employee_id, $user_identifier)
+    {
         global $wpdb;
         $votes_table = $wpdb->prefix . 'jo_exit_votes';
         $employees_table = $wpdb->prefix . 'jo_exit_employees';
@@ -800,7 +753,8 @@ class Jo_Exit_DB {
      * @param    int      $employee_id      Employee ID
      * @return   bool                       True on success, false on failure
      */
-    public static function reset_votes($employee_id) {
+    public static function reset_votes($employee_id)
+    {
         global $wpdb;
         $votes_table = $wpdb->prefix . 'jo_exit_votes';
 
@@ -820,7 +774,8 @@ class Jo_Exit_DB {
      * @param    int      $employee_id      Employee ID
      * @return   bool                       True on success, false on failure
      */
-    public static function reactivate_employee($employee_id) {
+    public static function reactivate_employee($employee_id)
+    {
         global $wpdb;
         $employees_table = $wpdb->prefix . 'jo_exit_employees';
 
@@ -844,7 +799,8 @@ class Jo_Exit_DB {
      * @param    int      $employee_id      Employee ID
      * @return   bool                       True on success, false on failure
      */
-    public static function delete_employee($employee_id) {
+    public static function delete_employee($employee_id)
+    {
         global $wpdb;
         $employees_table = $wpdb->prefix . 'jo_exit_employees';
         $votes_table = $wpdb->prefix . 'jo_exit_votes';
@@ -878,7 +834,8 @@ class Jo_Exit_DB {
      * @param    int      $hire_year        Hire year (optional)
      * @return   bool                       True on success, false on failure
      */
-    public static function update_employee($employee_id, $first_name, $last_name, $company_code, $hire_year = null) {
+    public static function update_employee($employee_id, $first_name, $last_name, $company_code, $hire_year = null)
+    {
         global $wpdb;
         $employees_table = $wpdb->prefix . 'jo_exit_employees';
 
@@ -923,7 +880,8 @@ class Jo_Exit_DB {
      * @param    int      $employee_id      Employee ID
      * @return   int                        Player points
      */
-    public static function calculate_player_points($user_id, $employee_id) {
+    public static function calculate_player_points($user_id, $employee_id)
+    {
         global $wpdb;
         $employees_table = $wpdb->prefix . 'jo_exit_employees';
         $votes_table = $wpdb->prefix . 'jo_exit_votes';
@@ -1015,7 +973,8 @@ class Jo_Exit_DB {
      * @param    int      $player_points    Player points
      * @return   bool                       True on success, false on failure
      */
-    public static function save_player_score($user_id, $employee_id, $player_points) {
+    public static function save_player_score($user_id, $employee_id, $player_points)
+    {
         global $wpdb;
         $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
 
@@ -1167,7 +1126,8 @@ class Jo_Exit_DB {
      * @param    int      $limit            Number of top scores to return (default: 3)
      * @return   array                      Array of player score objects
      */
-    public static function get_top_player_scores($employee_id, $limit = 3) {
+    public static function get_top_player_scores($employee_id, $limit = 3)
+    {
         global $wpdb;
         $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
 
@@ -1279,7 +1239,8 @@ class Jo_Exit_DB {
      * @param    int      $limit_per_employee  Number of top scores per employee (default: 3)
      * @return   array                         Array of employee objects with top_scores property
      */
-    public static function get_exited_employees_with_scores($limit_per_employee = 3) {
+    public static function get_exited_employees_with_scores($limit_per_employee = 3)
+    {
         global $wpdb;
 
         // Enable error logging
@@ -1370,7 +1331,8 @@ class Jo_Exit_DB {
      * @param    int      $limit    Maximum number of users to return (default: 20)
      * @return   array    Array of user objects with experience points
      */
-    public static function get_user_leaderboard($limit = 20) {
+    public static function get_user_leaderboard($limit = 20)
+    {
         global $wpdb;
         $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
         $users = array();
@@ -1456,7 +1418,8 @@ class Jo_Exit_DB {
      * @since    1.0.0
      * @return   array    Array of user objects with experience points
      */
-    public static function get_all_users_with_exp_points() {
+    public static function get_all_users_with_exp_points()
+    {
         global $wpdb;
         $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
         $users = array();
@@ -1503,7 +1466,8 @@ class Jo_Exit_DB {
      * @param    int      $exp_points    The new experience points value
      * @return   bool                    True on success, false on failure
      */
-    public static function update_user_exp_points($user_id, $exp_points) {
+    public static function update_user_exp_points($user_id, $exp_points)
+    {
         global $wpdb;
         $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
 
@@ -1610,7 +1574,8 @@ class Jo_Exit_DB {
             foreach ($scores as $score) {
                 $new_points = round($score->player_points * $ratio);
                 // Ensure minimum of 1 point
-                if ($new_points < 1) $new_points = 1;
+                if ($new_points < 1)
+                    $new_points = 1;
 
                 error_log('Updating score ID: ' . $score->id . ', old points: ' . $score->player_points . ', new points: ' . $new_points);
 
@@ -1655,7 +1620,8 @@ class Jo_Exit_DB {
      * @param    int      $user_id    The user ID
      * @return   bool                 True on success, false on failure
      */
-    public static function delete_user_from_leaderboard($user_id) {
+    public static function delete_user_from_leaderboard($user_id)
+    {
         global $wpdb;
         $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
 
@@ -1685,7 +1651,8 @@ class Jo_Exit_DB {
      * @since    1.0.0
      * @return   bool    True on success, false on failure
      */
-    public static function reset_all_exp_points() {
+    public static function reset_all_exp_points()
+    {
         global $wpdb;
         $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
 
@@ -1711,7 +1678,8 @@ class Jo_Exit_DB {
      * @since    1.0.0
      * @return   bool    True on success, false on failure
      */
-    public static function delete_all_exp_points() {
+    public static function delete_all_exp_points()
+    {
         global $wpdb;
         $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
 
@@ -1739,7 +1707,8 @@ class Jo_Exit_DB {
      * @param    int      $employee_id   Employee ID (0 for all employees)
      * @return   array                   Array of vote objects with employee and user details
      */
-    public static function get_user_votes($user_id = 0, $employee_id = 0) {
+    public static function get_user_votes($user_id = 0, $employee_id = 0)
+    {
         global $wpdb;
         $votes_table = $wpdb->prefix . 'jo_exit_votes';
         $employees_table = $wpdb->prefix . 'jo_exit_employees';
@@ -1835,7 +1804,8 @@ class Jo_Exit_DB {
      * @param    int      $points        Points for the vote
      * @return   bool                    True on success, false on failure
      */
-    public static function update_user_vote($user_id, $employee_id, $vote_type, $points) {
+    public static function update_user_vote($user_id, $employee_id, $vote_type, $points)
+    {
         global $wpdb;
         $votes_table = $wpdb->prefix . 'jo_exit_votes';
         $employees_table = $wpdb->prefix . 'jo_exit_employees';
@@ -1925,7 +1895,8 @@ class Jo_Exit_DB {
             // Update employee score if needed
             if ($score_adjustment !== 0) {
                 $new_score = intval($current_score) + $score_adjustment;
-                if ($new_score < 0) $new_score = 0;
+                if ($new_score < 0)
+                    $new_score = 0;
 
                 error_log('Jo_Exit_DB: Updating employee score from ' . $current_score . ' to ' . $new_score);
 
@@ -1960,7 +1931,8 @@ class Jo_Exit_DB {
      * @param    int      $user_id    User ID
      * @return   bool                 True on success, false on failure
      */
-    public static function reset_user_votes($user_id) {
+    public static function reset_user_votes($user_id)
+    {
         global $wpdb;
         $votes_table = $wpdb->prefix . 'jo_exit_votes';
         $employees_table = $wpdb->prefix . 'jo_exit_employees';
@@ -2009,7 +1981,8 @@ class Jo_Exit_DB {
 
                 // Calculate new score
                 $new_score = intval($current_score) - $points;
-                if ($new_score < 0) $new_score = 0;
+                if ($new_score < 0)
+                    $new_score = 0;
 
                 error_log('Jo_Exit_DB: Updating employee ID: ' . $employee_id . ' score from ' . $current_score . ' to ' . $new_score);
 
