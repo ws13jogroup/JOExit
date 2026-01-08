@@ -3,11 +3,13 @@
  * Plugin Name: JOb Exit Plugin
  * Plugin URI: https://example.com/jo-exit-plugin
  * Description: A Tinder-style app for employees with swipe functionality
- * Version: 1.0.3
- * Author: Augment
- * Author URI: https://example.com
- * Text Domain: job-exit-plugin
- * Domain Path: /languages
+ * Version:           1.0.4
+ * Author:            Antigravity
+ * Author URI:       https://example.com
+ * License:           GPL2
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       job-exit-plugin
+ * Domain Path:        /languages
  */
 
 // If this file is called directly, abort.
@@ -15,8 +17,11 @@ if (!defined('WPINC')) {
     die;
 }
 
-// Define plugin constants
-define('JO_EXIT_PLUGIN_VERSION', '1.0.3');
+/**
+ * Currently plugin version.
+ * Start at 1.0.4 and use SemVer - https://semver.org
+ */
+define('JO_EXIT_VERSION', '1.0.4');
 define('JO_EXIT_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('JO_EXIT_PLUGIN_URL', plugin_dir_url(__FILE__));
 

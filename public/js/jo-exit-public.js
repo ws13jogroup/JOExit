@@ -1136,7 +1136,8 @@ window.JoExit.userVotes = {};
             url: jo_exit_public.custom_ajax_url || jo_exit_public.ajax_url,
             type: 'POST',
             data: {
-                'action': 'get_leaderboard'
+                'action': 'get_leaderboard',
+                'nonce': jo_exit_public.nonce
             },
             success: function (response) {
                 // console.log('Leaderboard screen AJAX response:', response);
@@ -1237,7 +1238,8 @@ window.JoExit.userVotes = {};
             url: jo_exit_public.custom_ajax_url || jo_exit_public.ajax_url,
             type: 'POST',
             data: {
-                'action': 'get_exited'
+                'action': 'get_exited',
+                'nonce': jo_exit_public.nonce
             },
             success: function (response) {
                 // console.log('Exit screen AJAX response:', response);
