@@ -21,6 +21,24 @@ define('JO_EXIT_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('JO_EXIT_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 /**
+ * Plugin Update Checker Integration
+ */
+require_once JO_EXIT_PLUGIN_PATH . 'plugin-update-checker/plugin-update-checker.php';
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$myUpdateChecker = PucFactory::buildUpdateChecker(
+	'https://github.com/ws13jogroup/JOExit/',
+	__FILE__,
+	'JOExit'
+);
+
+// Set the branch that contains the stable release.
+$myUpdateChecker->setBranch('main');
+
+// Includi un Access Token se la repository è privata (lascia stringa vuota se pubblica)
+// $myUpdateChecker->setAuthentication('');
+
+/**
  * The code that runs during plugin activation.
  */
 function activate_jo_exit_plugin() {
