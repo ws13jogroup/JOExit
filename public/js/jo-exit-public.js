@@ -1010,12 +1010,12 @@ window.JoExit.userVotes = {};
                 }
             });
             const result = await response.json();
-            const data = jo_exit_public.use_rest_api ? result : (result.success ? result.data : null);
+            const employees = jo_exit_public.use_rest_api ? result : (result.success ? result.data.employees : null);
 
-            if (data && data.employees) {
-                renderLeaderboardScreen(data.employees);
+            if (employees && Array.isArray(employees)) {
+                renderLeaderboardScreen(employees);
             } else {
-                $('#jo-exit-leaderboard-screen').html('<div class="jo-exit-error">' + (data || jo_exit_public.error_loading_scores) + '</div>');
+                $('#jo-exit-leaderboard-screen').html('<div class="jo-exit-error">' + (jo_exit_public.error_loading_scores) + '</div>');
             }
         } catch (error) {
             console.error('Leaderboard error:', error);
@@ -1089,13 +1089,12 @@ window.JoExit.userVotes = {};
                     'X-WP-Nonce': jo_exit_public.rest_nonce
                 }
             });
-            const result = await response.json();
-            const data = jo_exit_public.use_rest_api ? result : (result.success ? result.data : null);
+            const employees = jo_exit_public.use_rest_api ? result : (result.success ? result.data.employees : null);
 
-            if (data && data.employees) {
-                renderExitScreen(data.employees);
+            if (employees && Array.isArray(employees)) {
+                renderExitScreen(employees);
             } else {
-                $('#jo-exit-exited-screen').html('<div class="jo-exit-error">' + (data || jo_exit_public.error_loading_exited) + '</div>');
+                $('#jo-exit-exited-screen').html('<div class="jo-exit-error">' + (jo_exit_public.error_loading_exited) + '</div>');
             }
         } catch (error) {
             console.error('Exit screen error:', error);
