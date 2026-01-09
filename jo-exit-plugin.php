@@ -3,7 +3,7 @@
  * Plugin Name: JOb Exit Plugin
  * Plugin URI: https://example.com/jo-exit-plugin
  * Description: A Tinder-style app for employees with swipe functionality
- * Version:           1.1.0
+ * Version:           1.1.1
  * Author:            Antigravity
  * Author URI:       https://example.com
  * License:           GPL2
@@ -21,7 +21,7 @@ if (!defined('WPINC')) {
  * Currently plugin version.
  * Start at 1.0.4 and use SemVer - https://semver.org
  */
-define('JO_EXIT_PLUGIN_VERSION', '1.1.0');
+define('JO_EXIT_PLUGIN_VERSION', '1.1.1');
 define('JO_EXIT_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('JO_EXIT_PLUGIN_URL', plugin_dir_url(__FILE__));
 

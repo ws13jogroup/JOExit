@@ -5,7 +5,7 @@
 class Jo_Exit_Rest extends WP_REST_Controller
 {
 
-    private $namespace = 'jo-exit/v1';
+    protected $namespace = 'jo-exit/v1';
 
     /**
      * Register the routes for the objects of the controller.
