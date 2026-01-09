@@ -189,8 +189,11 @@ class Jo_Exit_Public
             'plugin_url' => $plugin_url,
             'home_url' => home_url('/'),
             'nonce' => wp_create_nonce('jo_exit_public_nonce'),
+            'rest_url' => get_rest_url(null, 'jo-exit/v1'),
+            'rest_nonce' => wp_create_nonce('wp_rest'),
             'debug' => true,
-            'use_custom_ajax' => true, // Use the custom AJAX handler
+            'use_custom_ajax' => false, // Transitioning to REST API
+            'use_rest_api' => true,
             'is_user_logged_in' => is_user_logged_in(),
             'dark_mode' => $dark_mode,
             'is_admin' => current_user_can('administrator'),
@@ -396,66 +399,9 @@ class Jo_Exit_Public
         return ob_get_clean();
     }
 
-    /**
-     * AJAX handler for getting employees.
-     *
-     * @since    1.0.0
-     */
-    public function ajax_get_employees()
-    {
-        // Debug: Log the nonce
-        error_log('Received nonce: ' . (isset($_POST['nonce']) ? $_POST['nonce'] : 'not set'));
-        error_log('Expected nonce for jo_exit_public_nonce: ' . wp_create_nonce('jo_exit_public_nonce'));
 
-        // Disabilitiamo temporaneamente la verifica del nonce per debug
-        /*
-        if (isset($_POST['nonce'])) {
-            $nonce_verified = wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce');
-            if (!$nonce_verified) {
-                error_log('Jo_Exit: Nonce verification failed in ajax_get_employees');
-                wp_send_json_error(esc_html__('Security check failed', 'job-exit-plugin'));
-                return;
-            }
-        }
-        */
 
-        // Get all active employees
-        // No filtering by votes - users can vote multiple times for the same employee
-        $employees = Jo_Exit_DB::get_active_employees();
 
-        // Log the number of active employees for debugging
-        error_log('Total active employees: ' . count($employees));
-
-        wp_send_json_success(array(
-            'employees' => $employees,
-        ));
-    }
-
-    /**
-     * AJAX handler for getting the leaderboard.
-     *
-     * @since    1.0.0
-     */
-    public function ajax_get_leaderboard()
-    {
-        // Disabilitiamo temporaneamente la verifica del nonce per debug
-        /*
-        if (isset($_POST['nonce'])) {
-            $nonce_verified = wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce');
-            if (!$nonce_verified) {
-                error_log('Jo_Exit: Nonce verification failed in ajax_get_leaderboard');
-                wp_send_json_error(esc_html__('Security check failed', 'job-exit-plugin'));
-                return;
-            }
-        }
-        */
-        // Get leaderboard
-        $leaderboard = Jo_Exit_DB::get_leaderboard();
-
-        wp_send_json_success(array(
-            'employees' => $leaderboard,
-        ));
-    }
 
     /**
      * AJAX handler for toggling dark mode.
@@ -488,172 +434,9 @@ class Jo_Exit_Public
         ));
     }
 
-    /**
-     * AJAX handler for getting exited employees.
-     *
-     * @since    1.0.0
-     */
-    public function ajax_get_exited()
-    {
-        try {
-            // Disabilitiamo temporaneamente la verifica del nonce per debug
-            // Questo permetterà di far funzionare la schermata exit
-            /*
-            if (isset($_POST['nonce'])) {
-                $nonce_verified = wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce');
-                if (!$nonce_verified) {
-                    error_log('Jo_Exit: Nonce verification failed in ajax_get_exited');
-                    wp_send_json_error(esc_html__('Security check failed', 'job-exit-plugin'));
-                    return;
-                }
-            }
-            */
 
-            // Get exited employees
-            $exited = Jo_Exit_DB::get_exited_employees();
 
-            // Ensure $exited is an array
-            if (!is_array($exited)) {
-                $exited = array();
-                error_log('Jo_Exit: get_exited_employees did not return an array');
-            }
 
-            // Debug log
-            error_log('Jo_Exit: Getting exited employees. Count: ' . count($exited));
-            if (count($exited) > 0) {
-                error_log('Jo_Exit: First exited employee: ' . print_r($exited[0], true));
-            } else {
-                error_log('Jo_Exit: No exited employees found');
-            }
-
-            // Calcola il punteggio finale per ogni dipendente se non è già impostato
-            foreach ($exited as $key => $employee) {
-                // Se final_score non è impostato o è 0, calcolalo
-                if (!isset($employee->final_score) || intval($employee->final_score) <= 0) {
-                    // Calcola il punteggio finale (exit points + anzianità)
-                    $exit_points = intval($employee->score);
-                    $years = 0;
-
-                    // Calcola gli anni di anzianità se disponibili
-                    if (!empty($employee->hire_year) && is_numeric($employee->hire_year)) {
-                        $current_year = intval(date('Y'));
-                        $hire_year = intval($employee->hire_year);
-
-                        if ($hire_year > 1900 && $hire_year <= $current_year) {
-                            $years = $current_year - $hire_year;
-                        }
-                    }
-
-                    // Calcola il punteggio finale
-                    $final_score = $exit_points + $years;
-
-                    // Aggiorna il dipendente nel database
-                    global $wpdb;
-                    $table_name = $wpdb->prefix . 'jo_exit_employees';
-                    $wpdb->update(
-                        $table_name,
-                        array('final_score' => $final_score),
-                        array('id' => $employee->id)
-                    );
-
-                    // Aggiorna il dipendente nell'array
-                    $exited[$key]->final_score = $final_score;
-                }
-            }
-
-            // Invia la risposta con i dipendenti usciti
-            wp_send_json_success(array(
-                'employees' => $exited,
-            ));
-        } catch (Exception $e) {
-            error_log('Jo_Exit: Exception in ajax_get_exited: ' . $e->getMessage());
-            wp_send_json_error(esc_html__('An error occurred while loading exited employees.', 'job-exit-plugin'));
-        }
-    }
-
-    /**
-     * AJAX handler for voting.
-     *
-     * @since    1.0.0
-     */
-    public function ajax_vote()
-    {
-        // Check nonce
-        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce')) {
-            error_log('Jo_Exit: Nonce verification failed in ajax_vote');
-            wp_send_json_error(esc_html__('Security check failed', 'job-exit-plugin'));
-            return;
-        }
-
-        // Validate input
-        $employee_id = isset($_POST['employee_id']) ? intval($_POST['employee_id']) : 0;
-        $vote_type = isset($_POST['vote_type']) ? sanitize_text_field($_POST['vote_type']) : '';
-        $all_voted = isset($_POST['all_voted']) ? filter_var($_POST['all_voted'], FILTER_VALIDATE_BOOLEAN) : false;
-
-        if ($employee_id <= 0 || !in_array($vote_type, array('exit', 'nope'))) {
-            wp_send_json_error(esc_html__('Invalid input', 'job-exit-plugin'));
-        }
-
-        // Restrict exit votes to logged in users
-        if ($vote_type === 'exit' && !is_user_logged_in()) {
-            wp_send_json_error(esc_html__('You must be logged in to cast an exit vote.', 'job-exit-plugin'));
-            return;
-        }
-
-        // Get user identifier (IP address or user ID if logged in)
-        $user_identifier = is_user_logged_in() ? get_current_user_id() : $_SERVER['REMOTE_ADDR'];
-
-        // No voting limits - users can vote multiple times for the same employee
-
-        // Record vote
-        $result = Jo_Exit_DB::record_vote($employee_id, $user_identifier, $vote_type);
-
-        // Store vote in user meta if user is logged in
-        $cooldown_set = false;
-        if (is_user_logged_in()) {
-            // Get current exit votes count before storing the new vote
-            $user_id = get_current_user_id();
-            $current_exit_votes = Jo_Exit_User::count_exit_votes($user_id);
-            $max_exit_votes = Jo_Exit_User::get_max_exit_votes();
-
-            error_log('Jo_Exit: BEFORE storing vote, user ' . $user_id . ' has ' . $current_exit_votes . ' exit votes out of ' . $max_exit_votes . ' allowed');
-
-            // We no longer set cooldown when reaching the 5th exit vote
-            if ($vote_type === 'exit' && $current_exit_votes + 1 >= $max_exit_votes) {
-                error_log('Jo_Exit: This vote will be the 5th exit vote, but NOT forcing cooldown');
-            }
-
-            // Store the vote
-            $store_result = Jo_Exit_User::store_user_vote($employee_id, $vote_type);
-
-            error_log('Jo_Exit: store_user_vote result: ' . print_r($store_result, true));
-
-            // Check if cooldown was set in the result
-            if (isset($store_result['cooldown']) && $store_result['cooldown']) {
-                $cooldown_set = true;
-                error_log('Jo_Exit: Cooldown set for user ' . $user_id . ' after reaching 5 exit votes');
-            }
-
-            // We no longer need to set cooldown when all employees are voted
-            // as we're removing that logic
-        }
-
-        if ($result) {
-            $response_data = array(
-                'message' => 'Vote recorded successfully',
-                'cooldown' => $cooldown_set,
-                'all_employees_voted' => $all_voted
-            );
-
-            error_log('Jo_Exit: Sending AJAX response with cooldown=' . ($cooldown_set ? 'true' : 'false') . ', all_employees_voted=' . ($all_voted ? 'true' : 'false'));
-            error_log('Jo_Exit: Full response data: ' . print_r($response_data, true));
-
-            wp_send_json_success($response_data);
-        } else {
-            error_log('Jo_Exit: Failed to record vote');
-            wp_send_json_error(esc_html__('Failed to record vote', 'job-exit-plugin'));
-        }
-    }
 
     /**
      * AJAX handler for loading the info screen.
@@ -922,44 +705,7 @@ class Jo_Exit_Public
         wp_send_json($response);
     }
 
-    /**
-     * AJAX handler for getting the current exit votes count.
-     *
-     * @since    1.0.0
-     */
-    public function ajax_get_exit_votes_count()
-    {
-        // Verify nonce
-        if (isset($_POST['nonce'])) {
-            $nonce_verified = wp_verify_nonce($_POST['nonce'], 'jo_exit_public_nonce');
-            if (!$nonce_verified) {
-                error_log('Jo_Exit: Nonce verification failed in ajax_get_exit_votes_count');
-                wp_send_json_error(esc_html__('Security check failed', 'job-exit-plugin'));
-                return;
-            }
-        }
 
-        // Check if user is logged in
-        if (!is_user_logged_in()) {
-            wp_send_json_error(esc_html__('User not logged in', 'job-exit-plugin'));
-            return;
-        }
-
-        // Get user ID
-        $user_id = get_current_user_id();
-
-        // Get exit votes count
-        $exit_votes_count = Jo_Exit_User::count_exit_votes($user_id);
-        $max_exit_votes = Jo_Exit_User::get_max_exit_votes();
-
-        error_log('Jo_Exit: User ' . $user_id . ' has ' . $exit_votes_count . ' exit votes out of ' . $max_exit_votes . ' allowed');
-
-        // Send response
-        wp_send_json_success(array(
-            'count' => $exit_votes_count,
-            'max' => $max_exit_votes
-        ));
-    }
 
     /**
      * Render the account screen.

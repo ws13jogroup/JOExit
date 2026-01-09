@@ -193,67 +193,43 @@ window.JoExit.userVotes = {};
     /**
      * Load employees data
      */
-    function loadEmployees() {
+    async function loadEmployees() {
+        const url = jo_exit_public.use_rest_api ? jo_exit_public.rest_url + '/init' : (jo_exit_public.use_custom_ajax ? jo_exit_public.custom_ajax_url : jo_exit_public.ajax_url);
 
-        // Debug output
-        if (jo_exit_public.debug) {
-            // console.log('AJAX URL:', jo_exit_public.ajax_url);
-            // console.log('Nonce:', jo_exit_public.nonce);
-        }
-
-        // Get employees data
-        $.ajax({
-            url: jo_exit_public.use_custom_ajax ? jo_exit_public.custom_ajax_url : jo_exit_public.ajax_url,
-            type: 'POST',
-            data: {
-                'action': jo_exit_public.use_custom_ajax ? 'get_employees' : 'jo_exit_get_employees',
-                'nonce': jo_exit_public.nonce
-            },
-            success: function (response) {
-                if (jo_exit_public.debug) {
-                    // console.log('AJAX Response:', response);
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-WP-Nonce': jo_exit_public.rest_nonce
                 }
-                if (response.success) {
-                    // Make sure we have a valid response
-                    if (response.data && Array.isArray(response.data.employees)) {
-                        // Use all employees, no filtering
-                        employeesData = response.data.employees;
+            });
+            const result = await response.json();
 
-                        // Store user votes in a global variable
-                        window.JoExit.userVotes = response.data.user_votes || {};
+            // Handle both legacy and REST formats
+            const data = jo_exit_public.use_rest_api ? result : (result.success ? result.data : null);
 
-                        if (jo_exit_public.debug) {
-                            // console.log('All Employees:', employeesData.length);
-                            // console.log('First employee data:', employeesData[0]);
-                            // console.log('User votes:', window.JoExit.userVotes);
-                        }
-                    } else {
-                        employeesData = [];
-                        window.JoExit.userVotes = {};
-                    }
+            if (data) {
+                employeesData = data.employees || [];
+                window.JoExit.userVotes = data.user_votes || {};
 
-                    currentEmployeeIndex = 0;
+                // Update counters from initial payload
+                if (data.exit_votes_count !== undefined) {
+                    const max = data.max_exit_votes || 5;
+                    $('.jo-exit-votes-counter span').text(`${data.exit_votes_count}/${max}`);
+                }
 
-                    // Check if there are any employees available
-                    if (!employeesData || employeesData.length === 0) {
-                        // Show message that no employees are available
-                        $('#jo-exit-home-screen').html('<div class="jo-exit-no-cards">' + jo_exit_public.no_employees_text + '</div>');
-                    } else {
-                        // Render the home screen with available employees
-                        renderHomeScreen();
-                    }
+                if (employeesData.length === 0) {
+                    $('#jo-exit-home-screen').html('<div class="jo-exit-no-cards">' + jo_exit_public.no_employees_text + '</div>');
                 } else {
-                    showMessage(response.data);
+                    renderHomeScreen();
                 }
-            },
-            error: function (xhr, status, error) {
-                if (jo_exit_public.debug) {
-                    console.error('AJAX Error:', status, error);
-                    console.error('Response:', xhr.responseText);
-                }
+            } else {
                 showMessage(jo_exit_public.error_loading_employees);
             }
-        });
+        } catch (error) {
+            console.error('Fetch error:', error);
+            showMessage(jo_exit_public.error_loading_employees);
+        }
     }
 
     /**
@@ -293,47 +269,24 @@ window.JoExit.userVotes = {};
 
         // Add the current employee card
         const card = createEmployeeCard(employee);
+        card.addClass('jo-exit-current-card');
 
-        // Add the card to the container
+        // Pre-render next card if available (Virtualization/Pre-loading)
+        if (currentEmployeeIndex + 1 < employeesData.length) {
+            const nextEmployee = employeesData[currentEmployeeIndex + 1];
+            const nextCard = createEmployeeCard(nextEmployee);
+            nextCard.addClass('jo-exit-next-card');
+            cardContainer.append(nextCard);
+        }
+
+        // Add the current card last so it's on top
         cardContainer.append(card);
 
-        // Force a reflow to ensure the card is rendered with correct position
-        card[0].offsetHeight;
+        // Update the counter display from data already in memory
+        const exitVotesCount = window.JoExit.exit_votes_count || 0;
+        const maxExitVotes = window.JoExit.max_exit_votes || 5;
+        $('.jo-exit-votes-counter span').text(`${exitVotesCount}/${maxExitVotes}`);
 
-        // Add animation class to the card
-        card.addClass('jo-exit-card-animate-in');
-
-        // Remove animation class after animation completes to enable drag
-        setTimeout(function () {
-            card.removeClass('jo-exit-card-animate-in');
-        }, 500); // Same duration as the animation
-
-        // Get the current exit votes count if user is logged in
-        let exitVotesCount = 0;
-        let maxExitVotes = 5; // Maximum allowed exit votes
-
-        if (jo_exit_public.is_user_logged_in) {
-            // Make AJAX request to get current exit votes count asynchronously
-            $.ajax({
-                url: jo_exit_public.ajax_url,
-                type: 'POST',
-                data: {
-                    'action': 'jo_exit_get_exit_votes_count',
-                    'nonce': jo_exit_public.nonce
-                },
-                success: function (response) {
-                    if (response.success && response.data) {
-                        exitVotesCount = response.data.count || 0;
-                        maxExitVotes = response.data.max || 5;
-                        // Update the counter display if it exists
-                        $('.jo-exit-votes-counter span').text(`${exitVotesCount}/${maxExitVotes}`);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error getting exit votes count:', status, error);
-                }
-            });
-        }
 
         // Add the swipe buttons with vote counter
         const swipeButtons = $(`
@@ -459,8 +412,8 @@ window.JoExit.userVotes = {};
             return;
         }
 
-        // Find the card element
-        const $card = $('.jo-exit-card');
+        // Find the current card element (top of stack)
+        const $card = $('.jo-exit-current-card');
 
         // Debug logging
         if (jo_exit_public.debug) {
@@ -629,7 +582,7 @@ window.JoExit.userVotes = {};
      * Animate card swipe in a specific direction
      */
     async function animateCardSwipe(direction, employeeId, voteType) {
-        const $card = $('.jo-exit-card');
+        const $card = $('.jo-exit-current-card');
 
         // Add transition for smooth animation
         $card.css('transition', 'transform 0.5s ease');
@@ -803,77 +756,47 @@ window.JoExit.userVotes = {};
                 }
             };
 
-            const proceedToVote = () => {
-                $.ajax({
-                    url: jo_exit_public.use_custom_ajax ? jo_exit_public.custom_ajax_url : jo_exit_public.ajax_url,
-                    type: 'POST',
-                    data: {
-                        'action': jo_exit_public.use_custom_ajax ? 'vote' : 'jo_exit_vote',
-                        'nonce': jo_exit_public.nonce,
-                        'employee_id': employeeId,
-                        'vote_type': voteType,
-                        'all_voted': allEmployeesVoted
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            if (jo_exit_public.is_user_logged_in) {
-                                loadUserVotingData();
-                                updateExitVotesCounter();
+            const proceedToVote = async () => {
+                const url = jo_exit_public.use_rest_api ? jo_exit_public.rest_url + '/vote' : (jo_exit_public.use_custom_ajax ? jo_exit_public.custom_ajax_url : jo_exit_public.ajax_url);
 
-                                if (!window.JoExit.userVotes) {
-                                    window.JoExit.userVotes = {};
-                                }
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-WP-Nonce': jo_exit_public.rest_nonce
+                        },
+                        body: JSON.stringify({
+                            'action': 'jo_exit_vote',
+                            'employee_id': employeeId,
+                            'vote_type': voteType
+                        })
+                    });
+                    const result = await response.json();
 
-                                if (voteType === 'exit') {
-                                    const existingVote = window.JoExit.userVotes[employeeId];
-                                    const points = existingVote && existingVote.points ? existingVote.points + 1 : 1;
-                                    window.JoExit.userVotes[employeeId] = {
-                                        vote: 'exit',
-                                        points: points,
-                                        timestamp: Math.floor(Date.now() / 1000)
-                                    };
-                                } else if (voteType === 'nope') {
-                                    delete window.JoExit.userVotes[employeeId];
-                                }
-
-                                if (window.showLimitMessageAfterVote) {
-                                    window.showLimitMessageAfterVote = false;
-                                    showLimitMessage();
-                                }
-
-                                if (response.data && response.data.all_employees_voted) {
-                                    $.ajax({
-                                        url: jo_exit_public.ajax_url,
-                                        type: 'POST',
-                                        data: {
-                                            'action': 'jo_exit_set_cooldown',
-                                            'nonce': jo_exit_public.nonce
-                                        },
-                                        success: function () {
-                                            checkCooldownPeriod(true);
-                                            finishVote(false);
-                                        },
-                                        error: function () {
-                                            checkCooldownPeriod(true);
-                                            finishVote(false);
-                                        }
-                                    });
-                                    return; // Wait for cooldown AJAX
-                                }
-                            }
-                        } else {
-                            showMessage(response.data);
-                        }
-                        finishVote(continueToNextCard);
-                    },
-                    error: function () {
-                        showMessage('An error occurred while recording your vote.');
-                        finishVote(continueToNextCard);
+                    if (result.success || result.id) {
+                        // Success is expected
+                    } else if (result.cooldown) {
+                        checkCooldownPeriod(true);
+                        finishVote(false);
                     }
-                });
+                } catch (error) {
+                    console.error('Vote error:', error);
+                    // Revert optimism if needed (maybe reload counter)
+                    updateExitVotesCounter();
+                }
             };
 
-            checkCounterBeforeVote();
+            // OPTIMISTIC UI: Update counter and show next card immediately
+            if (voteType === 'exit') {
+                window.JoExit.exit_votes_count = (window.JoExit.exit_votes_count || 0) + 1;
+                const max = window.JoExit.max_exit_votes || 5;
+                $('.jo-exit-votes-counter span').text(`${window.JoExit.exit_votes_count}/${max}`);
+            }
+
+            finishVote(continueToNextCard);
+
+            proceedToVote();
         });
     }
 
@@ -885,80 +808,71 @@ window.JoExit.userVotes = {};
      *
      * @param {number} employeeId - The ID of the employee to delete the vote for
      */
-    function deleteVote(employeeId) {
+    async function deleteVote(employeeId) {
         // Show loading indicator
         const loadingHtml = `<div class="jo-exit-loading"><div class="jo-exit-spinner"></div>${jo_exit_public.deleting_vote}</div>`;
         $('#jo-exit-voted-employees').html(loadingHtml);
 
-        // Make AJAX request to delete the vote
-        $.ajax({
-            url: jo_exit_public.ajax_url,
-            type: 'POST',
-            data: {
-                'action': 'jo_exit_delete_vote',
-                'nonce': jo_exit_public.nonce,
-                'employee_id': employeeId
-            },
-            success: function (response) {
-                if (response.success) {
-                    // Reload the user voting data
-                    loadUserVotingData();
+        const url = jo_exit_public.rest_url + '/vote'; // Always use REST for delete if possible
 
-                    // Update the exit votes counter
-                    // Note: We don't know if the deleted vote was 'exit' or 'nope',
-                    // but we update the counter anyway to ensure it's accurate
-                    updateExitVotesCounter();
+        try {
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': jo_exit_public.rest_nonce
+                },
+                body: JSON.stringify({
+                    'employee_id': employeeId
+                })
+            });
+            const result = await response.json();
 
-                    // console.log('Vote deleted successfully for employee ID:', employeeId);
-                } else {
-                    // Show error message
-                    $('#jo-exit-voted-employees').html(`<p class="jo-exit-error">${jo_exit_public.error_deleting_vote}: ${response.data.message}</p>`);
-                    console.error('Error deleting vote:', response.data.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                // Show error message
-                $('#jo-exit-voted-employees').html(`<p class="jo-exit-error">${jo_exit_public.error_deleting_vote_try_again}</p>`);
-                console.error('AJAX error deleting vote:', status, error);
+            if (result.success) {
+                loadUserVotingData();
+                updateExitVotesCounter();
+            } else {
+                $('#jo-exit-voted-employees').html(`<p class="jo-exit-error">${jo_exit_public.error_deleting_vote}: ${result.message || 'Unknown error'}</p>`);
             }
-        });
+        } catch (error) {
+            console.error('Delete vote error:', error);
+            $('#jo-exit-voted-employees').html(`<p class="jo-exit-error">${jo_exit_public.error_deleting_vote_try_again}</p>`);
+        }
     }
 
     /**
      * Update the exit votes counter
      */
-    function updateExitVotesCounter() {
-        // Make AJAX request to get current exit votes count
-        $.ajax({
-            url: jo_exit_public.ajax_url,
-            type: 'POST',
-            data: {
-                'action': 'jo_exit_get_exit_votes_count',
-                'nonce': jo_exit_public.nonce
-            },
-            success: function (response) {
-                if (response.success && response.data) {
-                    // Use total exit votes count instead of session votes
-                    const exitVotesCount = response.data.count || 0;
-                    const maxExitVotes = response.data.max || 5;
+    async function updateExitVotesCounter() {
+        if (!jo_exit_public.is_user_logged_in) return;
 
-                    // Update the counter display
-                    $('.jo-exit-votes-counter span').text(`${exitVotesCount}/${maxExitVotes}`);
+        const url = jo_exit_public.use_rest_api ? jo_exit_public.rest_url + '/init' : (jo_exit_public.ajax_url);
 
-                    // console.log('Updated exit votes counter - total exit votes:', exitVotesCount, 'max:', maxExitVotes);
-
-                    // Show or hide the limit message based on the vote count
-                    if (exitVotesCount >= maxExitVotes) {
-                        showLimitMessage();
-                    } else {
-                        hideLimitMessage();
-                    }
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-WP-Nonce': jo_exit_public.rest_nonce
                 }
-            },
-            error: function (xhr, status, error) {
-                console.error('Error updating exit votes count:', status, error);
+            });
+            const result = await response.json();
+            const data = jo_exit_public.use_rest_api ? result : (result.success ? result.data : null);
+
+            if (data && data.exit_votes_count !== undefined) {
+                const exitVotesCount = data.exit_votes_count || 0;
+                const maxExitVotes = data.max_exit_votes || 5;
+
+                $('.jo-exit-votes-counter span').text(`${exitVotesCount}/${maxExitVotes}`);
+
+                if (exitVotesCount >= maxExitVotes) {
+                    showLimitMessage();
+                } else {
+                    hideLimitMessage();
+                }
             }
-        });
+        } catch (error) {
+            console.error('Error updating votes counter:', error);
+        }
     }
 
     /**
@@ -1026,151 +940,87 @@ window.JoExit.userVotes = {};
 
         // If we've gone through all employees, show completion message
         if (!employeesData || !Array.isArray(employeesData) || currentEmployeeIndex >= employeesData.length) {
-            // Mark that we've gone through all employees
             allEmployeesVoted = true;
 
-            // If there are no employees at all, show a different message
-            if (!employeesData || employeesData.length === 0) {
-                $('#jo-exit-home-screen').empty().html(`
-                    <div class="jo-exit-no-cards">
-                        <p>Nessun dipendente disponibile per la votazione.</p>
-                        <p>Ricontrolla più tardi!</p>
-                    </div>
-                `);
-                return;
-            }
-
-            // Set cooldown on the server
-            $.ajax({
-                url: jo_exit_public.ajax_url,
-                type: 'POST',
-                data: {
-                    'action': 'jo_exit_set_cooldown',
-                    'nonce': jo_exit_public.nonce
-                },
-                success: function (cooldownResponse) {
-                    checkCooldownPeriod(true);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error setting cooldown:', status, error);
-                    checkCooldownPeriod(true);
-                }
-            });
-
-            return;
-        }
-
-        // Show the next employee
-        const employee = employeesData[currentEmployeeIndex];
-
-        // Check if we have a valid employee
-        if (!employee || !employee.id) {
-            // Show message that no valid employees are available
+            // Clear the home screen and show message
             $('#jo-exit-home-screen').empty().html(`
                 <div class="jo-exit-no-cards">
-                    <p>No valid employees available for voting.</p>
-                    <p>Check back later!</p>
+                    <p>Nessun dipendente disponibile per la votazione.</p>
+                    <p>Ricontrolla più tardi!</p>
                 </div>
             `);
-            return;
-        }
 
-        // Create the new card
-        const card = createEmployeeCard(employee);
-
-        // Check if the card container exists
-        if ($('.jo-exit-card-container').length === 0) {
-            // If not, recreate the entire home screen
-            loadHomeScreen();
-            return;
-        }
-
-        // Debug log for the next employee
-        if (jo_exit_public.debug) {
-            // console.log('Showing next employee:', employee);
-            // console.log('Current userVotes:', window.JoExit.userVotes);
-            if (window.JoExit.userVotes && window.JoExit.userVotes[employee.id]) {
-                // console.log('This employee has a vote:', window.JoExit.userVotes[employee.id]);
+            // Use REST to set cooldown
+            if (jo_exit_public.is_user_logged_in) {
+                fetch(jo_exit_public.rest_url + '/cooldown', {
+                    method: 'POST',
+                    headers: {
+                        'X-WP-Nonce': jo_exit_public.rest_nonce
+                    }
+                }).then(() => checkCooldownPeriod(true));
             }
+
+            return;
         }
 
-        // Replace the current card
-        $('.jo-exit-card-container').empty().append(card);
+        // Remove the swiped card
+        $('.jo-exit-card:not(.jo-exit-current-card):not(.jo-exit-next-card)').remove();
+
+        // Promote next card to current
+        const nextCard = $('.jo-exit-next-card');
+        if (nextCard.length > 0) {
+            nextCard.removeClass('jo-exit-next-card').addClass('jo-exit-current-card');
+        } else {
+            // Fallback if somehow there was no next card
+            const employee = employeesData[currentEmployeeIndex];
+            const card = createEmployeeCard(employee);
+            card.addClass('jo-exit-current-card');
+            $('.jo-exit-card-container').append(card);
+        }
+
+        // Pre-render the *new* next card
+        if (currentEmployeeIndex + 1 < employeesData.length) {
+            const nextEmployee = employeesData[currentEmployeeIndex + 1];
+            const newNextCard = createEmployeeCard(nextEmployee);
+            newNextCard.addClass('jo-exit-next-card');
+            $('.jo-exit-card-container').prepend(newNextCard); // Behind current
+        }
 
         // Update card counter
         $('.jo-exit-card-counter').text(`${jo_exit_public.card_counter_label} ${currentEmployeeIndex + 1} ${jo_exit_public.cards_counter_of} ${employeesData.length}`);
 
-        // Get the new card and make sure it's properly positioned first
-        const $newCard = $('.jo-exit-card');
-        resetCardPosition($newCard);
-
-        // Force a reflow to ensure the position is applied
-        $newCard[0].offsetHeight;
-
-        // Then add animation class
-        $newCard.addClass('jo-exit-card-animate-in');
-
-        // Remove animation class after animation completes to enable drag
-        setTimeout(function () {
-            $newCard.removeClass('jo-exit-card-animate-in');
-        }, 500); // Same duration as the animation
-
-        // Re-initialize swipe for the new card after a longer delay to ensure animation is complete
-        setTimeout(function () {
-            initSwipe();
-            if (jo_exit_public.debug) {
-                // console.log('Swipe re-initialized for employee ID:', employee.id);
-            }
-        }, 550); // Slightly longer than animation duration
+        // Re-initialize swipe for the new top card
+        initSwipe();
     }
 
     /**
      * Load the Exit Points screen
      */
-    function loadLeaderboardScreen() {
+    async function loadLeaderboardScreen() {
         // Show loading indicator
         $('#jo-exit-leaderboard-screen').html(`<div class="jo-exit-loading"><div class="jo-exit-spinner"></div>${jo_exit_public.loading_scores}</div>`);
 
-        // Get leaderboard data
-        $.ajax({
-            url: jo_exit_public.custom_ajax_url || jo_exit_public.ajax_url,
-            type: 'POST',
-            data: {
-                'action': 'get_leaderboard',
-                'nonce': jo_exit_public.nonce
-            },
-            success: function (response) {
-                // console.log('Leaderboard screen AJAX response:', response);
-                try {
-                    // Assicuriamoci che la risposta sia un oggetto JSON
-                    if (typeof response === 'string') {
-                        response = JSON.parse(response);
-                    }
+        const url = jo_exit_public.use_rest_api ? jo_exit_public.rest_url + '/leaderboard' : (jo_exit_public.custom_ajax_url || jo_exit_public.ajax_url);
 
-                    if (response && response.success && response.data && response.data.employees) {
-                        renderLeaderboardScreen(response.data.employees);
-                    } else {
-                        console.error('Error loading leaderboard:', response);
-                        let errorMessage = jo_exit_public.error_loading_scores;
-                        if (response && response.data) {
-                            errorMessage = response.data;
-                        }
-                        $('#jo-exit-leaderboard-screen').html('<div class="jo-exit-error">' + errorMessage + '</div>');
-                    }
-                } catch (e) {
-                    console.error('Error parsing JSON response:', e);
-                    $('#jo-exit-leaderboard-screen').html(`<div class="jo-exit-error">${jo_exit_public.error_response_format}</div>`);
+        try {
+            const response = await fetch(url, {
+                method: jo_exit_public.use_rest_api ? 'GET' : 'POST',
+                headers: {
+                    'X-WP-Nonce': jo_exit_public.rest_nonce
                 }
-            },
-            error: function (xhr, status, error) {
-                console.error('AJAX Error loading leaderboard:', status, error);
-                let errorMessage = jo_exit_public.error_loading_scores;
-                if (xhr.responseJSON && xhr.responseJSON.data) {
-                    errorMessage = xhr.responseJSON.data;
-                }
-                $('#jo-exit-leaderboard-screen').html('<div class="jo-exit-error">' + errorMessage + '</div>');
+            });
+            const result = await response.json();
+            const data = jo_exit_public.use_rest_api ? result : (result.success ? result.data : null);
+
+            if (data && data.employees) {
+                renderLeaderboardScreen(data.employees);
+            } else {
+                $('#jo-exit-leaderboard-screen').html('<div class="jo-exit-error">' + (data || jo_exit_public.error_loading_scores) + '</div>');
             }
-        });
+        } catch (error) {
+            console.error('Leaderboard error:', error);
+            $('#jo-exit-leaderboard-screen').html('<div class="jo-exit-error">' + jo_exit_public.error_loading_scores + '</div>');
+        }
     }
 
     /**
@@ -1226,55 +1076,31 @@ window.JoExit.userVotes = {};
     /**
      * Load the exit screen
      */
-    function loadExitScreen() {
+    async function loadExitScreen() {
         // Show loading indicator
         $('#jo-exit-exited-screen').html(`<div class="jo-exit-loading"><div class="jo-exit-spinner"></div>${jo_exit_public.loading_exited_employees}</div>`);
 
-        // console.log('Loading exit screen...');
+        const url = jo_exit_public.use_rest_api ? jo_exit_public.rest_url + '/exited' : (jo_exit_public.custom_ajax_url || jo_exit_public.ajax_url);
 
-        // Carica i dipendenti usciti tramite AJAX
-        // Utilizziamo il custom_ajax_url se disponibile, altrimenti utilizziamo ajax_url
-        $.ajax({
-            url: jo_exit_public.custom_ajax_url || jo_exit_public.ajax_url,
-            type: 'POST',
-            data: {
-                'action': 'get_exited',
-                'nonce': jo_exit_public.nonce
-            },
-            success: function (response) {
-                // console.log('Exit screen AJAX response:', response);
-                try {
-                    // Assicuriamoci che la risposta sia un oggetto JSON
-                    if (typeof response === 'string') {
-                        response = JSON.parse(response);
-                    }
+        try {
+            const response = await fetch(url, {
+                method: jo_exit_public.use_rest_api ? 'GET' : 'POST',
+                headers: {
+                    'X-WP-Nonce': jo_exit_public.rest_nonce
+                }
+            });
+            const result = await response.json();
+            const data = jo_exit_public.use_rest_api ? result : (result.success ? result.data : null);
 
-                    if (response && response.success && response.data && response.data.employees) {
-                        renderExitScreen(response.data.employees);
-                    } else {
-                        console.error('Error loading exited employees:', response);
-                        // Mostra un messaggio di errore più dettagliato
-                        let errorMessage = jo_exit_public.error_loading_exited;
-                        if (response && response.data) {
-                            errorMessage = response.data;
-                        }
-                        $('#jo-exit-exited-screen').html('<div class="jo-exit-error">' + errorMessage + '</div>');
-                    }
-                } catch (e) {
-                    console.error('Error parsing JSON response:', e);
-                    $('#jo-exit-exited-screen').html(`<div class="jo-exit-error">${jo_exit_public.error_response_format}</div>`);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('AJAX Error loading exited employees:', status, error);
-                // Mostra un messaggio di errore più dettagliato
-                let errorMessage = jo_exit_public.error_loading_exited;
-                if (xhr.responseJSON && xhr.responseJSON.data) {
-                    errorMessage = xhr.responseJSON.data;
-                }
-                $('#jo-exit-exited-screen').html('<div class="jo-exit-error">' + errorMessage + '</div>');
+            if (data && data.employees) {
+                renderExitScreen(data.employees);
+            } else {
+                $('#jo-exit-exited-screen').html('<div class="jo-exit-error">' + (data || jo_exit_public.error_loading_exited) + '</div>');
             }
-        });
+        } catch (error) {
+            console.error('Exit screen error:', error);
+            $('#jo-exit-exited-screen').html('<div class="jo-exit-error">' + jo_exit_public.error_loading_exited + '</div>');
+        }
     }
 
     /**
@@ -1428,27 +1254,29 @@ window.JoExit.userVotes = {};
     /**
      * Load the info screen
      */
-    function loadInfoScreen() {
-        // Load the info content from the server
-        $.ajax({
-            url: jo_exit_public.use_custom_ajax ? jo_exit_public.custom_ajax_url : jo_exit_public.ajax_url,
-            type: 'POST',
-            data: {
-                'action': 'jo_exit_load_info',
-                'nonce': jo_exit_public.nonce
-            },
-            success: function (response) {
-                if (response.success) {
-                    $('#jo-exit-info-screen').html(response.data.content);
-                } else {
-                    $('#jo-exit-info-screen').html('<div class="jo-exit-error">Error loading info content.</div>');
+    async function loadInfoScreen() {
+        const url = jo_exit_public.use_rest_api ? jo_exit_public.rest_url + '/init' : (jo_exit_public.use_custom_ajax ? jo_exit_public.custom_ajax_url : jo_exit_public.ajax_url);
+
+        try {
+            const response = await fetch(url, {
+                method: jo_exit_public.use_rest_api ? 'GET' : 'POST',
+                headers: {
+                    'X-WP-Nonce': jo_exit_public.rest_nonce
                 }
-            },
-            error: function () {
-                // If AJAX fails, load the static content
+            });
+            const result = await response.json();
+
+            if (jo_exit_public.use_rest_api) {
+                // REST init doesn't return info content yet, we might need a dedicated endpoint or handle it statically
+                loadStaticInfoContent();
+            } else if (result.success && result.data.content) {
+                $('#jo-exit-info-screen').html(result.data.content);
+            } else {
                 loadStaticInfoContent();
             }
-        });
+        } catch (error) {
+            loadStaticInfoContent();
+        }
     }
 
     /**
@@ -1536,79 +1364,50 @@ window.JoExit.userVotes = {};
      * @param {boolean} forceShow - Force show cooldown message without checking server
      * @returns {boolean} True if the user needs to wait, false otherwise
      */
-    function checkCooldownPeriod(forceShow) {
-        // console.log('Checking cooldown period...');
-
+    async function checkCooldownPeriod(forceShow) {
         // Show loading indicator
         $('#jo-exit-home-screen').html(`<div class="jo-exit-loading"><div class="jo-exit-spinner"></div>${jo_exit_public.checking_status}</div>`);
 
-        // If forceShow is true, it means all employees have been voted
-        // So we can show the cooldown message immediately with 8 hours (28800 seconds)
         if (forceShow) {
-            // console.log('FORCE SHOW COOLDOWN: Forcing cooldown message display with 8 hours remaining');
             const cooldownTime = 28800; // 8 hours in seconds
-
-            // Clear any existing content in the home screen
             $('#jo-exit-home-screen').empty();
-
-            // Show cooldown message immediately
-            showCooldownMessage(cooldownTime * 1000); // Convert to milliseconds
-
-            // Start the countdown timer
-            startCooldownTimer(cooldownTime * 1000); // Convert to milliseconds
-
-            // Stop any further processing
+            showCooldownMessage(cooldownTime * 1000);
+            startCooldownTimer(cooldownTime * 1000);
             return true;
         }
 
-        // Make AJAX request to check cooldown status
-        $.ajax({
-            url: jo_exit_public.ajax_url,
-            type: 'POST',
-            data: {
-                'action': 'jo_exit_check_cooldown',
-                'nonce': jo_exit_public.nonce
-            },
-            success: function (response) {
-                // console.log('Cooldown check response:', response);
+        const url = jo_exit_public.use_rest_api ? jo_exit_public.rest_url + '/init' : jo_exit_public.ajax_url;
 
-                if (response.success) {
-                    if (response.data.in_cooldown) {
-                        // console.log('User is in cooldown period, remaining time:', response.data.remaining_time, 'seconds');
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-WP-Nonce': jo_exit_public.rest_nonce
+                }
+            });
+            const result = await response.json();
+            const data = jo_exit_public.use_rest_api ? result : (result.success ? result.data : null);
 
-                        // User is in cooldown period
-                        showCooldownMessage(response.data.remaining_time * 1000); // Convert to milliseconds
-
-                        // Start the countdown timer
-                        startCooldownTimer(response.data.remaining_time * 1000); // Convert to milliseconds
-                    } else {
-                        // console.log('User is not in cooldown period, session votes reset to:', response.data.session_votes || 0);
-
-                        // Update the counter display
-                        const sessionVotes = response.data.session_votes || 0;
-                        const maxExitVotes = 5; // Default max
-                        $('.jo-exit-votes-counter span').text(`${sessionVotes}/${maxExitVotes}`);
-
-                        // User is not in cooldown, load employees
-                        loadEmployees();
-                    }
+            if (data) {
+                if (data.in_cooldown) {
+                    showCooldownMessage(data.remaining_time * 1000);
+                    startCooldownTimer(data.remaining_time * 1000);
+                    return true;
                 } else {
-                    // Error checking cooldown, load employees anyway
-                    console.error('Error checking cooldown:', response);
+                    const sessionVotes = data.exit_votes_count || 0;
+                    const maxExitVotes = data.max_exit_votes || 5;
+                    $('.jo-exit-votes-counter span').text(`${sessionVotes}/${maxExitVotes}`);
                     loadEmployees();
                 }
-            },
-            error: function (xhr, status, error) {
-                // Error making AJAX request, load employees anyway
-                console.error('AJAX error checking cooldown:', status, error);
+            } else {
                 loadEmployees();
             }
-        });
-
-        // console.log('Returning true to prevent immediate loadEmployees() call');
-
-        // Return true to prevent loadEmployees() from being called immediately
-        return true;
+        } catch (error) {
+            console.error('Cooldown check error:', error);
+            loadEmployees();
+        }
+        return false;
+        return false;
     }
 
     /**

@@ -4,7 +4,8 @@
  *
  * @since      1.0.0
  */
-class Jo_Exit {
+class Jo_Exit
+{
 
     /**
      * The loader that's responsible for maintaining and registering all hooks that power
@@ -39,7 +40,8 @@ class Jo_Exit {
      *
      * @since    1.0.0
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->version = JO_EXIT_PLUGIN_VERSION;
         $this->plugin_name = 'job-exit-plugin';
 
@@ -47,10 +49,7 @@ class Jo_Exit {
         $this->set_locale();
         $this->define_admin_hooks();
         $this->define_public_hooks();
-
-        // Force update database structure on plugin load
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-jo-exit-activator.php';
-        Jo_Exit_Activator::update_database_structure();
+        $this->define_rest_hooks();
     }
 
     /**
@@ -59,7 +58,8 @@ class Jo_Exit {
      * @since    1.0.0
      * @access   private
      */
-    private function load_dependencies() {
+    private function load_dependencies()
+    {
         /**
          * The class responsible for orchestrating the actions and filters of the
          * core plugin.
@@ -98,6 +98,11 @@ class Jo_Exit {
          */
         require_once JO_EXIT_PLUGIN_PATH . 'includes/class-jo-exit-notifications.php';
 
+        /**
+         * The class responsible for the REST API.
+         */
+        require_once JO_EXIT_PLUGIN_PATH . 'includes/class-jo-exit-rest.php';
+
         $this->loader = new Jo_Exit_Loader();
     }
 
@@ -110,7 +115,8 @@ class Jo_Exit {
      * @since    1.0.0
      * @access   private
      */
-    private function set_locale() {
+    private function set_locale()
+    {
         $plugin_i18n = new Job_Exit_i18n();
 
         $this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
@@ -123,7 +129,8 @@ class Jo_Exit {
      * @since    1.0.0
      * @access   private
      */
-    private function define_admin_hooks() {
+    private function define_admin_hooks()
+    {
         $plugin_admin = new Jo_Exit_Admin($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
@@ -172,7 +179,8 @@ class Jo_Exit {
      * @since    1.0.0
      * @access   private
      */
-    private function define_public_hooks() {
+    private function define_public_hooks()
+    {
         $plugin_public = new Jo_Exit_Public($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
@@ -182,17 +190,7 @@ class Jo_Exit {
         $this->loader->add_action('init', $plugin_public, 'register_shortcodes');
 
         // Add AJAX handlers for public
-        $this->loader->add_action('wp_ajax_jo_exit_vote', $plugin_public, 'ajax_vote');
-        $this->loader->add_action('wp_ajax_nopriv_jo_exit_vote', $plugin_public, 'ajax_vote');
 
-        $this->loader->add_action('wp_ajax_jo_exit_get_employees', $plugin_public, 'ajax_get_employees');
-        $this->loader->add_action('wp_ajax_nopriv_jo_exit_get_employees', $plugin_public, 'ajax_get_employees');
-
-        $this->loader->add_action('wp_ajax_jo_exit_get_leaderboard', $plugin_public, 'ajax_get_leaderboard');
-        $this->loader->add_action('wp_ajax_nopriv_jo_exit_get_leaderboard', $plugin_public, 'ajax_get_leaderboard');
-
-        $this->loader->add_action('wp_ajax_jo_exit_get_exited', $plugin_public, 'ajax_get_exited');
-        $this->loader->add_action('wp_ajax_nopriv_jo_exit_get_exited', $plugin_public, 'ajax_get_exited');
 
         $this->loader->add_action('wp_ajax_jo_exit_load_account', $plugin_public, 'ajax_load_account');
         $this->loader->add_action('wp_ajax_nopriv_jo_exit_load_account', $plugin_public, 'ajax_load_account');
@@ -229,7 +227,7 @@ class Jo_Exit {
         $this->loader->add_action('wp_ajax_jo_exit_set_cooldown', $plugin_user, 'ajax_set_cooldown');
 
         // Hide admin bar for subscribers
-        add_action('after_setup_theme', function() {
+        add_action('after_setup_theme', function () {
             if (is_user_logged_in() && !current_user_can('edit_posts')) {
                 show_admin_bar(false);
             }
@@ -246,8 +244,7 @@ class Jo_Exit {
         $this->loader->add_action('wp_ajax_jo_exit_get_user_leaderboard', $plugin_public, 'ajax_get_user_leaderboard');
         $this->loader->add_action('wp_ajax_nopriv_jo_exit_get_user_leaderboard', $plugin_public, 'ajax_get_user_leaderboard');
 
-        // Register AJAX endpoint for getting exit votes count
-        $this->loader->add_action('wp_ajax_jo_exit_get_exit_votes_count', $plugin_public, 'ajax_get_exit_votes_count');
+
 
         // Notifications endpoints
         $this->loader->add_action('wp_ajax_jo_exit_get_unread_notifications', $plugin_public, 'ajax_get_unread_notifications');
@@ -261,11 +258,24 @@ class Jo_Exit {
     }
 
     /**
+     * Register all of the hooks related to the REST API.
+     *
+     * @since    1.0.0
+     * @access   private
+     */
+    private function define_rest_hooks()
+    {
+        $plugin_rest = new Jo_Exit_Rest();
+        $this->loader->add_action('rest_api_init', $plugin_rest, 'register_routes');
+    }
+
+    /**
      * Run the loader to execute all of the hooks with WordPress.
      *
      * @since    1.0.0
      */
-    public function run() {
+    public function run()
+    {
         $this->loader->run();
     }
 
@@ -276,7 +286,8 @@ class Jo_Exit {
      * @since     1.0.0
      * @return    string    The name of the plugin.
      */
-    public function get_plugin_name() {
+    public function get_plugin_name()
+    {
         return $this->plugin_name;
     }
 
@@ -286,7 +297,8 @@ class Jo_Exit {
      * @since     1.0.0
      * @return    Jo_Exit_Loader    Orchestrates the hooks of the plugin.
      */
-    public function get_loader() {
+    public function get_loader()
+    {
         return $this->loader;
     }
 
@@ -296,7 +308,8 @@ class Jo_Exit {
      * @since     1.0.0
      * @return    string    The version number of the plugin.
      */
-    public function get_version() {
+    public function get_version()
+    {
         return $this->version;
     }
 }

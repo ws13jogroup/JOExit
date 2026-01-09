@@ -15,11 +15,19 @@ class Jo_Exit_DB
      */
     public static function get_active_employees()
     {
+        $cached = get_transient('jo_exit_active_employees');
+        if ($cached !== false) {
+            return $cached;
+        }
+
         global $wpdb;
         $table_name = $wpdb->prefix . 'jo_exit_employees';
 
         $query = "SELECT * FROM $table_name WHERE status = 'active' ORDER BY score DESC";
-        return $wpdb->get_results($query);
+        $results = $wpdb->get_results($query);
+
+        set_transient('jo_exit_active_employees', $results, HOUR_IN_SECONDS);
+        return $results;
     }
 
     /**
@@ -30,35 +38,15 @@ class Jo_Exit_DB
      */
     public static function get_exited_employees()
     {
+        $cached = get_transient('jo_exit_exited_employees');
+        if ($cached !== false) {
+            return $cached;
+        }
+
         global $wpdb;
         $table_name = $wpdb->prefix . 'jo_exit_employees';
 
-        // Enable error logging
-        $wpdb->show_errors();
-        error_log('Jo_Exit_DB: Getting exited employees');
-
-        // Verifica se la tabella esiste
-        $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'");
-        if (!$table_exists) {
-            error_log('Jo_Exit_DB: Table ' . $table_name . ' does not exist');
-
-            // Forza la creazione della tabella
-            require_once(plugin_dir_path(dirname(__FILE__)) . 'includes/class-jo-exit-activator.php');
-            Jo_Exit_Activator::activate();
-
-            // Verifica nuovamente se la tabella esiste
-            $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'");
-            if (!$table_exists) {
-                error_log('Jo_Exit_DB: Failed to create table ' . $table_name);
-                return array();
-            }
-
-            error_log('Jo_Exit_DB: Table ' . $table_name . ' created successfully');
-        }
-
         $query = "SELECT * FROM $table_name WHERE status = 'exit' ORDER BY exit_date DESC";
-        error_log('Jo_Exit_DB: Query: ' . $query);
-
         $results = $wpdb->get_results($query);
 
         if ($wpdb->last_error) {
@@ -66,8 +54,7 @@ class Jo_Exit_DB
             return array();
         }
 
-        error_log('Jo_Exit_DB: Found ' . count($results) . ' exited employees');
-
+        set_transient('jo_exit_exited_employees', $results, HOUR_IN_SECONDS);
         return $results;
     }
 
@@ -79,11 +66,31 @@ class Jo_Exit_DB
      */
     public static function get_leaderboard()
     {
+        $cached = get_transient('jo_exit_leaderboard');
+        if ($cached !== false) {
+            return $cached;
+        }
+
         global $wpdb;
         $table_name = $wpdb->prefix . 'jo_exit_employees';
 
         $query = "SELECT * FROM $table_name WHERE status = 'active' ORDER BY score DESC";
-        return $wpdb->get_results($query);
+        $results = $wpdb->get_results($query);
+
+        set_transient('jo_exit_leaderboard', $results, HOUR_IN_SECONDS);
+        return $results;
+    }
+
+    /**
+     * Clear all transients related to employees
+     * 
+     * @since 1.0.0
+     */
+    public static function clear_cache()
+    {
+        delete_transient('jo_exit_active_employees');
+        delete_transient('jo_exit_exited_employees');
+        delete_transient('jo_exit_leaderboard');
     }
 
     /**
@@ -145,8 +152,8 @@ class Jo_Exit_DB
                 array('id' => $data['id'])
             );
 
-            if ($result === false) {
-                error_log('Update error: ' . $wpdb->last_error);
+            if ($result !== false) {
+                self::clear_cache();
             }
 
             return $result !== false ? $data['id'] : false;
@@ -167,15 +174,13 @@ class Jo_Exit_DB
                 $insert_data['hire_year'] = $data['hire_year'];
             }
 
-            error_log('Insert data: ' . print_r($insert_data, true));
-
             $result = $wpdb->insert(
                 $table_name,
                 $insert_data
             );
 
-            if (!$result) {
-                error_log('Insert error: ' . $wpdb->last_error);
+            if ($result) {
+                self::clear_cache();
             }
 
             return $result ? $wpdb->insert_id : false;
@@ -207,47 +212,19 @@ class Jo_Exit_DB
         $votes_table = $wpdb->prefix . 'jo_exit_votes';
         $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
 
-        // Enable error logging
-        $wpdb->show_errors();
-        error_log('Marking employee as exited: ' . $id . ', exit date: ' . $exit_date);
-
-        // Validate input parameters
-        if (empty($id) || !is_numeric($id) || $id <= 0) {
-            error_log('Invalid employee ID: ' . $id);
-            return false;
-        }
-
         // Validate exit date format
         if (empty($exit_date) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $exit_date)) {
-            error_log('Invalid exit date format: ' . $exit_date . ', using current date');
             $exit_date = date('Y-m-d');
         }
 
         // Check if employee exists and is not already exited
         $employee = self::get_employee($id);
         if (!$employee) {
-            error_log('Employee not found: ' . $id);
             return false;
         }
-
-        error_log('Employee data: ' . print_r($employee, true));
 
         if ($employee->status === 'exit') {
-            error_log('Employee is already exited: ' . $id);
             return true; // Already exited, consider it a success
-        }
-
-        // Force update database structure to ensure player_scores table exists
-        require_once(plugin_dir_path(dirname(__FILE__)) . 'includes/class-jo-exit-activator.php');
-        Jo_Exit_Activator::update_database_structure();
-
-        // Check if player_scores table exists after forced update
-        $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$player_scores_table'");
-        error_log('Player scores table exists after forced update: ' . ($table_exists ? 'Yes' : 'No'));
-
-        if (!$table_exists) {
-            error_log('Failed to create player scores table even after forced update');
-            return false;
         }
 
         try {
@@ -291,22 +268,16 @@ class Jo_Exit_DB
             );
 
             if ($result === false) {
-                error_log('Failed to update employee status: ' . $wpdb->last_error);
                 $wpdb->query('ROLLBACK');
                 return false;
             }
-
-            error_log('Employee status updated successfully with final score: ' . $final_score);
 
             // Verify the employee status was updated
             $updated_employee = self::get_employee($id);
             if (!$updated_employee || $updated_employee->status !== 'exit') {
-                error_log('Failed to verify employee status update: ' . ($updated_employee ? $updated_employee->status : 'employee not found'));
                 $wpdb->query('ROLLBACK');
                 return false;
             }
-
-            error_log('Verified employee status was updated to exit');
 
             // Get all users who voted 'exit' for this employee
             $exit_voters_query = $wpdb->prepare(
@@ -401,12 +372,10 @@ class Jo_Exit_DB
             // Commit the transaction even if some player scores failed
             // The primary goal is to mark the employee as exited
             $wpdb->query('COMMIT');
-            error_log('Transaction committed successfully');
-            error_log('Successfully marked employee as exited: ' . $id . ' with final score: ' . $final_score);
+            self::clear_cache();
 
             return true;
         } catch (Exception $e) {
-            error_log('Exception in mark_exit: ' . $e->getMessage());
             $wpdb->query('ROLLBACK');
             return false;
         }
@@ -624,6 +593,7 @@ class Jo_Exit_DB
         error_log('Final employee score: ' . $final_score);
 
         $wpdb->query('COMMIT');
+        self::clear_cache();
         return true;
     }
 
@@ -820,6 +790,7 @@ class Jo_Exit_DB
         }
 
         $wpdb->query('COMMIT');
+        self::clear_cache();
         return true;
     }
 
@@ -865,8 +836,8 @@ class Jo_Exit_DB
             array('id' => $employee_id)
         );
 
-        if ($result === false) {
-            error_log('Update error: ' . $wpdb->last_error);
+        if ($result !== false) {
+            self::clear_cache();
         }
 
         return $result !== false;
