@@ -137,6 +137,42 @@ class Jo_Exit_Rest extends WP_REST_Controller
     }
 
     /**
+     * Record a vote.
+     */
+    public function vote($request)
+    {
+        $employee_id = $request->get_param('employee_id');
+        $vote_type = $request->get_param('vote_type');
+        $user_id = get_current_user_id();
+
+        if ($vote_type === 'exit' && !$user_id) {
+            return new WP_Error('rest_forbidden', 'You must be logged in to cast an exit vote.', array('status' => 401));
+        }
+
+        $user_identifier = $user_id ?: $_SERVER['REMOTE_ADDR'];
+
+        $result = Jo_Exit_DB::record_vote($employee_id, $user_identifier, $vote_type);
+
+        $cooldown_set = false;
+        if ($user_id > 0) {
+            require_once JO_EXIT_PLUGIN_PATH . 'public/class-jo-exit-user.php';
+            $store_result = Jo_Exit_User::store_user_vote($employee_id, $vote_type);
+            if (isset($store_result['cooldown']) && $store_result['cooldown']) {
+                $cooldown_set = true;
+            }
+        }
+
+        if ($result) {
+            return new WP_REST_Response(array(
+                'success' => true,
+                'cooldown' => $cooldown_set
+            ), 200);
+        }
+
+        return new WP_Error('rest_vote_failed', 'Failed to record vote', array('status' => 500));
+    }
+
+    /**
      * Set cooldown for the current user.
      */
     public function set_cooldown($request)
