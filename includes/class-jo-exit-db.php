@@ -1111,41 +1111,13 @@ class Jo_Exit_DB
         global $wpdb;
         $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
 
-        // Enable error logging
-        $wpdb->show_errors();
-        error_log('NEW IMPLEMENTATION: Getting top player scores for employee: ' . $employee_id . ', limit: ' . $limit);
-
         // Validate input parameters
         if (empty($employee_id) || !is_numeric($employee_id) || $employee_id <= 0) {
-            error_log('Invalid employee ID: ' . $employee_id);
             return array();
         }
 
         // Ensure limit is a positive integer
         $limit = max(1, intval($limit));
-
-        // Force update database structure to ensure player_scores table exists
-        require_once(plugin_dir_path(dirname(__FILE__)) . 'includes/class-jo-exit-activator.php');
-        Jo_Exit_Activator::update_database_structure();
-
-        // Check if player_scores table exists after forced update
-        $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$player_scores_table'");
-        error_log('Player scores table exists after forced update: ' . ($table_exists ? 'Yes' : 'No'));
-
-        if (!$table_exists) {
-            error_log('Failed to create player scores table even after forced update');
-            return array();
-        }
-
-        // Check if there are any scores for this employee
-        $count_query = $wpdb->prepare("SELECT COUNT(*) FROM $player_scores_table WHERE employee_id = %d", $employee_id);
-        $score_count = $wpdb->get_var($count_query);
-        error_log('Found ' . $score_count . ' scores for employee ' . $employee_id . ' in the database');
-
-        if ($score_count == 0) {
-            error_log('No scores found for employee ' . $employee_id . ', returning empty array');
-            return array();
-        }
 
         try {
             // Get the top scores with user information
@@ -1159,20 +1131,15 @@ class Jo_Exit_DB
                 $employee_id,
                 $limit
             );
-            error_log('Scores query: ' . $scores_query);
 
             $scores = $wpdb->get_results($scores_query);
 
             if ($scores === null || $scores === false) {
-                error_log('Error executing scores query: ' . $wpdb->last_error);
                 return array();
             }
 
-            error_log('Found ' . count($scores) . ' scores with the query');
-
             // If no scores found, return empty array
             if (empty($scores)) {
-                error_log('No scores found with the query, returning empty array');
                 return array();
             }
 
@@ -1184,9 +1151,6 @@ class Jo_Exit_DB
                 // If no custom avatar, use default WordPress avatar
                 if (empty($avatar_url)) {
                     $avatar_url = get_avatar_url($score->user_id);
-                    error_log('Using default avatar for user: ' . $score->user_id);
-                } else {
-                    error_log('Using custom avatar for user: ' . $score->user_id . ', avatar: ' . $avatar_url);
                 }
 
                 $score->avatar_url = $avatar_url;
@@ -1201,9 +1165,6 @@ class Jo_Exit_DB
                     $score->display_name = $score->user_login ?: ('User ' . $score->user_id);
                 }
             }
-
-            error_log('Returning ' . count($scores) . ' scores for employee ' . $employee_id);
-            error_log('First score: ' . print_r($scores[0], true));
 
             return $scores;
         } catch (Exception $e) {
@@ -1221,81 +1182,30 @@ class Jo_Exit_DB
      */
     public static function get_exited_employees_with_scores($limit_per_employee = 3)
     {
-        global $wpdb;
-
-        // Enable error logging
-        $wpdb->show_errors();
-        error_log('NEW IMPLEMENTATION: Getting all exited employees with scores, limit per employee: ' . $limit_per_employee);
-
         // Ensure limit is a positive integer
         $limit_per_employee = max(1, intval($limit_per_employee));
-
-        // Force update database structure to ensure player_scores table exists
-        require_once(plugin_dir_path(dirname(__FILE__)) . 'includes/class-jo-exit-activator.php');
-        Jo_Exit_Activator::update_database_structure();
-
-        // Check if player_scores table exists after forced update
-        $player_scores_table = $wpdb->prefix . 'jo_exit_player_scores';
-        $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$player_scores_table'");
-        error_log('Player scores table exists after forced update: ' . ($table_exists ? 'Yes' : 'No'));
-
-        if (!$table_exists) {
-            error_log('Failed to create player scores table even after forced update');
-            return array();
-        }
 
         try {
             // Get all exited employees
             $exited_employees = self::get_exited_employees();
 
-            if (!is_array($exited_employees)) {
-                error_log('get_exited_employees did not return an array');
+            if (!is_array($exited_employees) || empty($exited_employees)) {
                 return array();
-            }
-
-            error_log('Found ' . count($exited_employees) . ' exited employees');
-
-            // If no exited employees, return empty array
-            if (empty($exited_employees)) {
-                error_log('No exited employees found');
-                return array();
-            }
-
-            // Debug the first exited employee
-            if (count($exited_employees) > 0) {
-                error_log('First exited employee: ' . print_r($exited_employees[0], true));
             }
 
             // Get top scores for each employee
             foreach ($exited_employees as $employee) {
                 if (!isset($employee->id) || empty($employee->id)) {
-                    error_log('Employee has no ID, skipping');
                     continue;
                 }
-
-                $employee_name = isset($employee->first_name) && isset($employee->last_name) ?
-                    $employee->first_name . ' ' . $employee->last_name : 'Unknown';
-
-                error_log('Getting top scores for employee: ' . $employee->id . ' (' . $employee_name . ')');
 
                 // Get top scores for this employee
                 $employee->top_scores = self::get_top_player_scores($employee->id, $limit_per_employee);
 
                 if (!is_array($employee->top_scores)) {
-                    error_log('get_top_player_scores did not return an array for employee: ' . $employee->id);
                     $employee->top_scores = array();
                 }
-
-                error_log('Found ' . count($employee->top_scores) . ' top scores for employee: ' . $employee->id);
-
-                // Debug the first top score if available
-                if (count($employee->top_scores) > 0) {
-                    error_log('First top score for employee ' . $employee->id . ': ' . print_r($employee->top_scores[0], true));
-                }
             }
-
-            // Debug the final result
-            error_log('Returning ' . count($exited_employees) . ' exited employees with scores');
 
             return $exited_employees;
         } catch (Exception $e) {

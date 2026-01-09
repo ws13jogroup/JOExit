@@ -132,7 +132,18 @@ class Jo_Exit_Rest extends WP_REST_Controller
      */
     public function get_exited($request)
     {
-        $exited = Jo_Exit_DB::get_exited_employees();
+        $exited = Jo_Exit_DB::get_exited_employees_with_scores();
+
+        // Add current user's points if logged in
+        if (is_user_logged_in()) {
+            $user_id = get_current_user_id();
+            foreach ($exited as $employee) {
+                $employee->player_points = Jo_Exit_DB::calculate_player_points($user_id, $employee->id);
+                $user_data = get_userdata($user_id);
+                $employee->player_username = $user_data ? $user_data->display_name : '';
+            }
+        }
+
         return new WP_REST_Response($exited, 200);
     }
 
