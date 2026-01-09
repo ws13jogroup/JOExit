@@ -208,8 +208,13 @@ window.JoExit.userVotes = {};
             // Handle both legacy and REST formats
             const data = jo_exit_public.use_rest_api ? result : (result.success ? result.data : null);
 
-            if (data) {
-                employeesData = data.employees || [];
+            if (data && (data.employees || Array.isArray(data))) {
+                employeesData = jo_exit_public.use_rest_api ? (data.employees || []) : (data.employees || []);
+                // If it was a direct array (not from /init), handle it
+                if (Array.isArray(data) && jo_exit_public.use_rest_api) {
+                    employeesData = data;
+                }
+
                 window.JoExit.userVotes = data.user_votes || {};
 
                 // Update counters from initial payload
@@ -224,7 +229,8 @@ window.JoExit.userVotes = {};
                     renderHomeScreen();
                 }
             } else {
-                showMessage(jo_exit_public.error_loading_employees);
+                console.error('Invalid data structure in loadEmployees:', data);
+                $('#jo-exit-home-screen').html('<div class="jo-exit-error">' + jo_exit_public.error_loading_employees + '</div>');
             }
         } catch (error) {
             console.error('Fetch error:', error);
@@ -1015,6 +1021,7 @@ window.JoExit.userVotes = {};
             if (employees && Array.isArray(employees)) {
                 renderLeaderboardScreen(employees);
             } else {
+                console.error('Invalid leaderboard data:', employees, result);
                 $('#jo-exit-leaderboard-screen').html('<div class="jo-exit-error">' + (jo_exit_public.error_loading_scores) + '</div>');
             }
         } catch (error) {
@@ -1089,11 +1096,13 @@ window.JoExit.userVotes = {};
                     'X-WP-Nonce': jo_exit_public.rest_nonce
                 }
             });
+            const result = await response.json();
             const employees = jo_exit_public.use_rest_api ? result : (result.success ? result.data.employees : null);
 
             if (employees && Array.isArray(employees)) {
                 renderExitScreen(employees);
             } else {
+                console.error('Invalid exit screen data:', employees, result);
                 $('#jo-exit-exited-screen').html('<div class="jo-exit-error">' + (jo_exit_public.error_loading_exited) + '</div>');
             }
         } catch (error) {

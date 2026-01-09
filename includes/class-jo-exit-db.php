@@ -39,20 +39,29 @@ class Jo_Exit_DB
     public static function get_exited_employees()
     {
         $cached = get_transient('jo_exit_exited_employees');
-        if ($cached !== false) {
+        if ($cached !== false && is_array($cached)) {
             return $cached;
         }
 
         global $wpdb;
         $table_name = $wpdb->prefix . 'jo_exit_employees';
 
+        // Verify if table exists first
+        $table_exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name));
+        if (!$table_exists) {
+            error_log('Jo_Exit_DB: Table missing: ' . $table_name);
+            return array();
+        }
+
         $query = "SELECT * FROM $table_name WHERE status = 'exit' ORDER BY exit_date DESC";
         $results = $wpdb->get_results($query);
 
         if ($wpdb->last_error) {
-            error_log('Jo_Exit_DB: Database error: ' . $wpdb->last_error);
+            error_log('Jo_Exit_DB: Database error in get_exited_employees: ' . $wpdb->last_error);
             return array();
         }
+
+        $results = is_array($results) ? $results : array();
 
         set_transient('jo_exit_exited_employees', $results, HOUR_IN_SECONDS);
         return $results;
